@@ -39,6 +39,8 @@ private/
 pics/
 bib/
 *_files/
-
+*.tex
 *.html
+*.log
+
 .Rproj.user
