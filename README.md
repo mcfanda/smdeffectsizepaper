@@ -1,4 +1,8 @@
-# Repository for _Standardized means difference effect size measures for planned comparisons, trend analysis and other applications of contrast analysis_ manuscript by Marcello Gallucci & Marco Perugini
+# Repository for:
+
+_Standardized means difference effect size measures for planned comparisons, trend analysis and other applications of contrast analysis_ manuscript 
+
+by __Marcello Gallucci__ & __Marco Perugini__
 
 ## Files:
  
