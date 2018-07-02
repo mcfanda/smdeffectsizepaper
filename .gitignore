@@ -39,6 +39,6 @@ private/
 pics/
 bib/
 *_files/
-*.pdf
 
+*.html
 .Rproj.user

@@ -4,9 +4,11 @@ _Standardized means difference effect size measures for planned comparisons, tre
 
 by __Marcello Gallucci__ & __Marco Perugini__
 
+The manuscript is written in Rmarkdown and requires [papaja](https://github.com/crsh/papaja) package to format the output
+
 ## Files:
  
-* smdeffectsizes.v1.Rmd: Rmarkdown source file of the manuscript, with embedded data and examples
+* smdeffectsizes.v1.Rmd: Rmarkdown source file of the manuscript, with embedded data and examples. Corresponding .pdf file is the compiled version
 
 * contrast.bib: latex references repository
 
