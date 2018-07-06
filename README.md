@@ -12,12 +12,9 @@ The manuscript is written in Rmarkdown and requires [papaja](https://github.com/
 
 * contrast.bib: latex references repository
 
-* coverletter.Rmd: cover letter (it cannot be compiled because some of private files cannot be sharable)
 
 ## Folder:
 
 * resources: scripts and material to compile the manuscript and the cover letter
-
-* previous: previous versions
 
 * algebra: additional derivations not crucial for the paper but udeful to check the correctness of the paper formulas
