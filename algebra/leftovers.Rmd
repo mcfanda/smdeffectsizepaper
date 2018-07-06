@@ -1,0 +1,30 @@
+---
+title: "left overs"
+author: "Marcello Gallucci"
+date: "March 9, 2018"
+output: html_document
+---
+
+
+
+Consider the case in which a researcher observes a pattern of means in a published research in a three-group design $\boldsymbol{m}=\{30,25,21\}$, each group with $n=12$, with pooled standard deviation $s_p=15$. She wishes to compute the effect size $d_g$, deduct a post-hoc power for the observed results, and estimate the required N to attain power at .80 level for a contrast comparing the first again the other two groups, that is, $c=\{1,-1/2,-1/2\}$.  The R code is:
+
+
+
+```{r echo=TRUE}
+library(cpower)
+dg<-d.contr(cont,means=m,sd=sp)
+## post-hoc power
+power.contrast.t(cont,d=dg,n=12)
+## attain power at .80
+power.contrast.t(cont,d=dg,power=.80)
+```
+
+Thus, the original studied, based on $n=12$ per cell and an effect size $d_g=.46$, had a power of .249, but to attain a power of .80 one needs n=55 (54.7 rounded) per cell.
+
+```{r echo=F,results='hide'}
+dz<-d.contr(cont,means=m,sd=sp,scale="q")
+f<-dz/sqrt(length(cont))
+
+```
+To conduct the same analysis with GPower, we first compute the $f$ according to Equation (dgtof), which yields $f$=`r f`, and use the "F-test: Fixed effects, special and interactions" [@gpower], with 1 numerator degree of freedom and 3 as number of groups. The post-hoc power based on the original $12 \cdot 3=36$ participants yileds an estimation of .249, and the a-priori required N for a power equal to 80 results in $N=165$ which approximates $165/3=55$ participants per group.

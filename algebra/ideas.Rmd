@@ -1,0 +1,589 @@
+---
+title: "Notes on Cohen's d for contrasts"
+author: "Marcello Gallucci"
+date: "`r Sys.setlocale('LC_TIME', 'en_US.UTF-8') ; format(Sys.time(), '%d %B, %Y')`"
+output: pdf_document
+editor_options: 
+  chunk_output_type: inline
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+```
+
+## Idea
+
+People know well Cohen's d and more and more often they compute it for contrasts and planned comparisons. However, the literature about Cohen's d applied to contrasts is scarce and rather technical. Furthremore, there are some difficulties in computing the effect size index to contrasts, and some counterintuitive reasoning must be done. 
+
+Here there are some results that can be used to write a paper on how to computed the cohen's d for contrasts, how to interpret it and how to use it in power analysis. A confortable R package is also developed and presented. 
+
+## Definitions
+
+Interpretablility: of an effect size that people can interpret whereever is applied
+
+Comparability: of an effect size that keeps its meaning when compared across different designs and type of analyses (Keppel, 1991; Tabachnick & Fidell, 2001)
+
+Consistency: of a test or index whose results are identical for trivial scaling of the coefficients. The t-test for a constrat, for instance, is consistent across scaling the contrast such that if one multiplies the contrast weights by a constant, the results do not change. 
+
+### Population parameters
+
+* $\delta$: population effect size
+* $c_i$: contrast weights
+* $\mu_i$: cell means
+* $\hat{\Delta}=\sum_i{c_i \cdot \mu_i}$: contrast expected value
+* $\sigma^2$ : population error variance (within cell), assumed to be equal across groups
+* $k$ number of means 
+
+### Sample parameters
+
+* $n$ cell size
+* $N$ total sample size, it is assumed that $N=n \cdot k$
+* $s$ sample estimate of $\sigma$
+* $m_i$ sample estimates of $\mu_i$
+* $d$ sample estimate of $\delta$, such that $\hat{\delta}=d$
+
+
+# Definition of different contrast $\delta$
+
+
+```{r echo=FALSE, results='hide'}
+# a<-c(1,0,0)
+# cc=c(10,-5,-5)
+# 2*(a%*%cc)/sum(abs(cc))
+# 
+# a=c(1,0)
+# cc<-c(1,1)
+# 2*(a%*%cc)/sum(abs(cc))
+# 
+# a=c(1,1,0,0)
+ss<-function(cc) sqrt(sum(cc^2))
+sab<-function(cc) sum(abs(cc))
+
+cc<-c(1,-1,-1,1,-1,1)
+sum(cc)
+ss(cc)
+sab(cc)
+# 2*(a%*%cc)/sum(abs(cc))
+# cc<-c(1,+1,-1,-1)
+# 2*(a%*%cc)/sum(abs(cc))
+# 
+# es<-.80
+# a=c(1,0,0,0,-1)
+# cc<-c(2,1,0,-1,-2)
+# 2*(a%*%cc)/sum(abs(cc))
+# 
+# (cc)/sum(abs(cc))
+# cc<-c(1,+1,-1,-1)
+# 2*(a%*%cc)/sum(abs(cc))
+# (mm<-2*(cc*es)/sum(abs(cc)))
+# 2*(mm%*%cc)/sum(abs(cc))
+# 
+
+```
+
+## Unscaled $\delta$
+Let $c={c_i}$ be a set of contrast weights such that $\sum_i{c_i}=0$. Let ${\mu_i}$ be the vector of population means. Define the unscaled effect size $\delta_0$ as:
+
+$$\delta_0={{\sum_i{c_i \cdot \mu_i}} \over  {\sigma }}$$
+The unscaled effect size is uninterpretable and inconsistant because it depends on the scale of $c_i$.
+
+## Scaled $\delta$
+In order for the effect size index to be interpretable and portable, it needs to be scaled. A natural scaling method (Gpower manual, Wahlsten, 1991) is to divide $\delta_0$ by square root of the sum of squares of the weights. That is:
+$$\delta={{\sum_i{c_i \cdot \mu_i}} \over  {\sqrt{\sum_i{c_i^2}} \cdot \sigma }}$$
+
+
+
+It is useful to define $q={1 \over \sqrt{\sum_i{c_i^2}}}$ is such a way we can write the scaled effect size as:
+$$\delta_{q}={q \cdot \delta_0}$$
+We refer to the $\delta$ coefficient so scaled as scaled with the _q-method_
+This is a classical way to standardize the contrast (SPSS does it, cits in folder) and , it is the method of scaling that I found used in almost all web references on the topic. 
+
+It has several advantages. However, we'll see that when it comes to estimating Cohen's d, it does not work very well. 
+
+
+### Charateristics of q-method $\delta_q$
+
+This method show several pros but it also produces some unespected results. 
+
+*Pros*
+
+It corresponds to the inferential tests that tests the contrast against 0. In fact, assuming equal variances and sample sizes, it can be estimated with $d_q$ from the t-test:
+
+$$d_q \approx {t_{N-2} \cdot {\sqrt{ k \over {N-k}}}}$$
+
+
+Furthermore, it represents the non-centrality paramter of the t-distribution corresponding to the test of the contrast. In particular, if one draws from a population with means $\mu_i$ and within groups standard deviation $\sigma$, the non-centrality parameter $\lambda_c$ of the t-distribution associated with the contrast $\sum{c_i \mu_i}$ is (cf. Liu, 2009) 
+
+$$\lambda_c=\sqrt{{n \over \sum_i{c_i^2}}} \cdot {\sum{c_i \mu_i} \over \sigma}={\sqrt{n}*\delta_q}$$
+independently of the choice of $c_i$ (provided $\sum_i{c_i}=0$).
+
+These two proporties make the q-method to scale the d index easy to compute and to use in power analysis (cf below).
+
+
+*Cons*
+
+The first problem with the q-method is that it is not consistent with the Cohen's d for k=2. Infact, for k=2 and $c=\{1,-1\}$,
+
+$$\delta_q={{\mu_1-\mu_2} \over  {\sqrt(2) \cdot \sigma}}={\delta_0 \over \sqrt{2}}$$
+
+This may sound strange, but it is due to the fact that scaling the effect size changes the interpretation of it (see below). 
+
+The other problem with method-q is that it would not give consistent results when applying it to different desings with identical results.
+
+Consider a two-groups design with $\mu=\{1.5,0.5\}$ and $\sigma=2$, with contrast $c=\{1,-1\}$. 
+
+$$\delta_{q2} = { {1.5-0.5} \over {\sqrt{2} \cdot 2}}={.353}$$
+
+Assume now that the same results are expected in a tree-groups desings, such that $\mu=\{1.5,.5,.5\}$ and $\sigma=2$, with contrast $c=\{2,-1,-1\}$ It is clear that the mean differences are the same $\hat{\Delta_2}=1.5-.5=1$ and $\hat{\Delta_3}=1.5-[(0.5-0.5)/2]=1$, respectively, and the $\sigma$ is the same. However,
+
+```{r echo=FALSE,results='hide'}
+sig<-2
+cc<-c(1,-1)
+k=length(cc)
+ssd<-sqrt(sum(cc^2))*sig
+mu<-c(1.5,.5)
+(cc%*%mu)/ssd
+
+cc<-c(2,-1,-1)
+k=length(cc)
+ssd<-sqrt(sum(cc^2))*sig
+mu<-c(1.5,.5,.5)
+res<-(cc%*%mu)/ssd
+
+1/sqrt(2)
+```
+
+
+$$\delta_{q3} = { {3-1} \over {\sqrt{6} \cdot 2}}={2 \over {\sqrt{6}} \cdot 2}=.408$$
+
+Obviously, an effect size index that expresses the same difference across two designs with a different size is not an intuitive solution.
+
+
+### Interpretation of $\delta_q$
+
+The q-method is not wrong, but changes the interpretation of the effect size. In the $k=2$ case, the original Cohen's d indicates _how many within-group standard deviations the two means are apart_. Alternatively, it expresses _the mean difference in the scale of within-group standard deviation_. 
+
+The q-method uses the  _contrast_ standard deviation $\sigma_c=\sigma \cdot \sqrt{\sum_i{c_i^2 }}$, thus its interpretation should be:   _how many contrast standard deviations the two means are apart_. In particular, the standard deviation of the contrast for $k=2$ is 
+
+$$\sigma_c=\sqrt{\sigma_1^2 + \sigma_2^2}= \sqrt{2 \cdot \sigma^2}=\sqrt{2} \cdot \sigma$$
+
+whereas the Cohen's pooled standard deviation is 
+$$\sigma_c=\sqrt{{\sigma_1^2 + \sigma_2^2} \over 2}= \sqrt{{2 \cdot \sigma^2} \over 2}=\sigma$$
+
+Notice that a simple adjustment of $d_q$ to solve the two-group inconsistency will not be a general solution. If one considers an alternative scaling such as:
+
+$$\delta_a={{\sum_i{c_i \cdot \mu_i}} \over  {\sqrt{\sum_i{c_i^2} \over k} \cdot \sigma }}$$
+will solve the two-group inconsistency:
+$$\delta_a={{\mu_1-\mu_2} \over  {\sqrt{2 \over 2} \cdot \sigma }}=\delta_0$$
+but will not help the portability of the index. In fact, this alternative schedule produces $\delta_a=\delta_0$ for $k=2$, but a for $k=3$, holding everyhtin else constant, it gives a different effect size:
+$$\delta_a={{\Delta_0} \over  { \sqrt{6 \over 3} \cdot \sigma }}={\delta_0 \over \sqrt{2}}$$
+
+
+## Proper scaling
+
+A different scaling method can be suggested which is interpretable, consistent and portable. Let's $g={2 \over \sum_i{\left|{c_i}\right|}}$, where $|x|$ indicates the absolute value of $x$, then  
+
+$$\delta_g=g \cdot \delta_0={2 \over \sum{|{c_i}|}} \cdot {{\sum_i{c_i \cdot \mu_i}} \over  {\sigma }}$$
+
+Because the computation of $\delta_g$ is equivalent to the Cohen's d multiplied by the $g$ factor, we shall call this method of computation the _g-method_.
+
+
+### Charateristics of $\delta_g$
+
+A contrast comparing two groups means scaled with the g-method corresponds exactly to the classical cohen's d. classical cohen's d is computed using $c=\{1,-1\}. Then $g={2 \over 2}$, which resolves in:
+
+$$\delta_g={{\mu_1-\mu_2} \over  {\sigma}}=\delta_0$$
+
+Furthermore, the g-method guarantees that comparing equivalent quantities yields an identical effect size. Consider again the example with a two-groups desing with $\mu=\{1.5,0.5\}$ and $\sigma=2$, with contrast $c=\{1,-1\}$. 
+
+$$\delta_{g2} = {2 \over 2} \cdot { {1.5-0.5} \over {2}}=.5$$
+
+For a tree-groups design, such that $\mu=\{1.5,0.5,0.5\}$ and $\sigma=2$, with contrast $c=\{2,-1,-1\}$ 
+
+$$\delta_{g3} ={ { {2 \over 4} \cdot {{3-.5-.5} \over 2}}={2 \over 4}}=.5$$
+As expected.
+
+Nontheless, the g-method does capture differences in effect size when the compared quantitiesare the same but they represent effects of difference intensity when observed across different designs. Consider we want to estimate a linear trend in different designs, and that the designs we considers give always mean equal to 1.5 for the first group, -1.5 for the last, and zero for all groups in the middle. For k=3, means are $\mu=\{1.5,0,-1.5\}$, for k=4, $\mu=\{1.5,0,0,-1.5\}$ and for k=5 $\mu=\{1.5,0,0,0,-1.5\}$. It is clear that the linear trend is the same for $k=2$ and $k=3$ but it gets smaller and smaller as $k$ increases, even though the quantities being compared are always the same, ($\mu_1-\mu_k=3$), for all designs, and all cells have the same standard deviations $\sigma$. The effect size should be different.
+
+With the proposed calculation method, the effect size coherently decreases with k. Let's compute them:
+
+For $k=3$, $c=\{1.5,0,-1.5\}$, $g=1$ and 
+$$\delta_{g3}={{\mu_1-\mu_3} \over  {\sigma}}={3 \over \sigma}$$
+
+For $k=4$, we can define the linear contrast over 4 means as  $c=\{3,1,-1,-3\}$. We obtain
+$$g_4={2 \over \sum_i{\left|{c_i}\right|}}={2 \over 8}={1 \over 4}$$
+
+Thus, 
+$$\delta_{g4}={1 \over 4} \cdot { { 4.5  + 4.5} \over \sigma}={2.25 \over \sigma}$$
+
+which is clearly less than $\delta_{g3}$. For
+
+
+```{r echo=FALSE,results='hide'}
+sig<-2
+cc<-c(3,1,-1,-3)
+g<-2/sum(abs(cc))
+k=length(cc)
+mu<-c(1.5,0,0,-1.5)
+g*(cc%*%mu)
+
+
+sig<-2
+cc<-c(2,1,0,-1,-2)
+g<-2/sum(abs(cc))
+k=length(cc)
+mu<-c(1.5,0,0,0,-1.5)
+g*(cc%*%mu)
+
+```
+
+
+
+For $k=5$, the linear contrast over 5 means as  $c=\{2,1,0,-1,-2\}$. We obtain
+$$g_5={2 \over \sum_i{\left|{c_i}\right|}}={2 \over 6}={1 \over 3}$$
+
+
+Thus, 
+$$\delta_{g5}={ {1 \over 3} \cdot {{ 3+3} \over \sigma}}={2 \over \sigma}$$
+
+Obviously, the choice of the scale of $c$ is immaterial. In the last example, if we choose an alternative definition of the  linear trend for $k=5$, such as $c_{alt}=\{4,2,0,2,4\}$, the scaling parameter is 
+$$g_a={2 \over \sum_i{\left|{c_i}\right|}}={2 \over 12}={1 \over 6}$$
+
+giving $g_a \cdot c_a=g_5 \cdot c_5$ and thus yielding the same results.
+
+### Interpretation of $\delta_g$
+
+In all cases with have reviewed,  $\delta_g$ can be interpreted as _the difference between the weighted average of the means associated with the positive weights and the weighted average of the means associated with the negative weights of the contrast, expressed in terms within-groups standard deviations_. 
+
+Alternatively the index indicates _how many within-group strandard deviation the wighted average of the positively weighted groups are apart from the weighted mean of the negatively weighted groups_.
+
+
+# Estimating $\delta_g$ with $d_g$
+
+We refer to $d$ as the empirical estimation of the population $\delta$. When the observed means $m_i$ and standard deviation $s_i$ ara available for each group $i$, $d_0$ the can be computed as follows:
+
+$$d_0={\sum_i{c_i \cdot m_i} \over s_p}$$
+where $s_p$ is the pooled standard deviation, which can be computed as follows (Howell 2002, p.204, 380):
+
+$$s_p={\sqrt{\sum_i{(n_i-1)s_i^2} \over {N-k}}}$$
+
+Conseguently, 
+$$d_q={\sum_i{c_i \cdot m_i} \over {s_p \sqrt{\sum_i{c_i^2}}}}$$
+and
+
+$$d_g={2 \over \sum_i{|{c_i}|}} \cdot {\sum_i{c_i \cdot m_i} \over {s_p }}$$
+
+
+A part from direct computution of the index, we see now how it can be derived with alternative methods. First, if feasable, the contrast conding can be set such that $\sum{|{c_i}|}=2$. If so, 
+
+$$d_g={2 \over 2} \cdot d_0=d_0$$
+There are several situations in which this is very easy to accomplish. Whenever the contrast weights are defined using 1, 0 and -1, $c`=2c/k$ satisfies the requirement. Thus, if one is testing the interaction contrast $c=\{-1,1,1,-1\}$, ${c^\prime}={-1/2,1/2,1/2,-1/2}$ tests the same hypothesis than $c$ but gives 
+$$d_g={{\sum{c^\prime_i m_i}} \over s_p}$$
+
+In other cases data may not be available, but only an observed $d$ may be. In these cases, if a contrast $c$ has been computed with the q-method, one can compute $d_g$ using the following relation.
+
+$$d_g={g \cdot d_0}={g \cdot {d_q \over q}}={2 \cdot {\sqrt{\sum{c_i^2}} \over \sum_i{|{c_i}|}} \cdot d_q}$$
+
+One can also estimate $\delta_g$ computing $d_g$ from the t-test. Recall that
+
+$$d_q \approx {t_{N-2} \cdot {\sqrt{ k \over {N-k}}}}$$
+thus
+
+$$d_g \approx  {t_{N-2} \cdot {\sqrt{ k \over {N-k}}} } \cdot {\sqrt{\sum{c_i^2}} \over \sum_i{|{c_i}|}} \cdot 2$$
+
+It should be noted that the ratio ${\sqrt{\sum{c_i^2}} \over \sum_i{|{c_i}|}} \cdot 2$ is usually very easy to compute and can be done mentally. For and interaction contrast $c=\{1,-1-1,1\}$, for instance, it is 2 divided by 4, times 2, that is 1.
+
+
+# Power Analysis
+
+Here we show how it is relatively easy to estimate the power of a contrast estimate test using standard power software. Power analysis software usually provides a way to compute the power parameters ($\beta$, required $n$ per cell, etc.) of a t-test based on a expected $\delta$. Software usually assumes that the $\delta$ is computed for comparing two independent cell means (independent samples t-test). 
+The critical bit of power calculation that is interesting here is the non centrality parameter $\lambda$ which affects the location of the t-distribution employed in computing power. For standard two independent samples t-test the parameter is (cite cunning & finch to avoid explaing):
+
+$$\lambda_2=\sqrt{{n \over 2}} \cdot \delta$$
+
+From the prospective of contrast analysis, $\lambda_2$ is a special case of a more general non-centrality paramter of the t-test with $N-k$ degrees of freedom associated to a contrast $c$ (Liu, 2009):
+
+$$\lambda_c=\sqrt{{n \over \sum_i{c_i^2}}} \cdot \delta_0$$
+which equates $\lambda_2$ when $c=\{1,-1\}$ as in the two independent samples t-test. 
+To compute the power parameters (power, required N, alpha, minimum effect size), one needs to specify the correct non-centrality parameter. Depending on the software one is using, different transformations of the estimated $\delta$ may be required.
+
+When data are available for the computation of the non-centrality parameter $\lambda$ and the power analysis software allows to specify $\lambda$, one can simply estimate it as:
+
+$$\hat{\lambda_c}=\sqrt{{n \over \sum_i{c_i^2}}} \cdot d_0$$
+
+
+When only a $d$ is available, the non-centrality parameter needs to be scaled back to $\sqrt{n/\sum_i{c_i^2}} \cdot d_0$ accordingly to the scaling method one used.  
+
+When $d$ is an estimation of $\delta_q$,  
+
+$$\hat{\lambda_q}=\sqrt{n} \cdot d_q$$
+
+
+When $d$ is an estimation of $\delta_g$,  
+
+$$\hat{\lambda_g}=\sqrt{n} \cdot {q \over g } \cdot {d_g}={\sum{|{c_i}|} \over {2 \cdot\sqrt{\sum_i{c_i^2}}}} \cdot d_g$$
+
+Notice from last equation that $g$ is simply a constant that multiplies $d_0$ to obtain a scaled $d_g$. Thus, whatever scaling $w$ one is using such that $\delta_w=\delta_0 \cdot w$, we have:
+
+$$\lambda_w={\sqrt{n} \cdot {q \over w} \cdot \delta_w}$$
+
+# Repeated measures designs
+
+In repeated measures designs, there are different ways to compute the standardized difference effect size index (here goes the discussion on different way to compute the conceptualize $\sigma$). A good way to define $\delta$ is to give credit to the core feature of repeated measure designs, the reduced error term (as compared with between-subject designs) due to the correlation among repeated measures, which is very often positive.
+
+Let $y_j$ be a serie of random variables representing $k$ repeated meansures, with $E(y_i)=\mu_i$ $VAR(y_i)=\sigma_i^2$. Let $\rho_{ij}$ be the correlation between any pair of these variables. Following  the sphericity assumptions of repeated measures ANOVA, assume all measures have the same variance and the correlations are the same for any pair of measures.
+
+In case of $k=2$
+
+$$ \delta_0={{\mu_1-\mu_2} \over {\sqrt{\sigma_1^2+\sigma_2^2-2\cdot \rho_{12}}}}$$
+thus
+$$ \delta_0={{\mu_1-\mu_2} \over {\sqrt{2 \cdot (\sigma^2 -\rho_{12})}}}$$
+
+The unscaled index computed for a contrast $c=\{c_i\}$ is 
+$$ \delta_0={\sum_i{c_i \cdot \mu_i} \over {\sqrt{k \cdot \sigma^2 - k(k-1) \cdot \rho}}}$$
+$$ \delta_0={\sum_i{c_i \cdot \mu_i} \over {\sqrt{k \cdot (\sigma^2 - (k-1) \cdot \rho)}}}$$
+
+## Software usage
+
+
+### G\*Power
+G\*Power provides power functions for "generic t-test" which allows to input $\lambda$ and $df$ and return the power. One can computed non-centrality parameter as showed above and input it in the software. Unfortunately, "generic t-test" does not allow to estimated the required N, an operation often useful for users.
+
+However, in G\*Power one can compute all power parameters of a contrast using the F-test. Under "ANOVA: fixed effect, special, main effects and interactions" it is possible to specify k (number of groups), $df=N-k$ and the effect size $f$. The correct $f$ calculation for a contrast $c$ is:
+
+$$f={\sum_i{ c_i \cdot m_i} \over { \sqrt{ k \cdot \sum_i{c_i^2} \cdot s_p^2}}}$$
+
+When data are not available, but only the $d$ is, the $d$ has to be transformed into $d_q$ and the the $f$ can be computed as:
+
+$$f={{1 \over \sqrt{k}} \cdot d_q}$$
+
+## R
+
+To the best of our knowledge, R power functions commonly used in power analysis do not allow to accomodate for contrasts. This is mainly due to the computation of $df$ and $\lambda$ that are tailored either to one-sample t-test, where $\lambda=\sqrt{N} \cdot \delta$ and $df=N-1$, or to two-samples t-test, where $\lambda=\sqrt{n} \cdot \delta$ and $df=N-2$
+
+Thus, we have written a simple power function that computes the power parameters for contrasts based on estimated $\delta$ scaled in arbitrary ways, with shortcuts for method-g and method-q.
+
+In particular, the function works like this:
+
+```{r eval=FALSE}
+power.contrast.t(cont,d = NULL,n =NULL ,power=NULL,scale="g")
+```
+The parameter `cont` requires to input the contrast used to compute the $d$, with arbitrary scaling.
+Two parameters among `d`, `n` , and `power` are required, and the missing one is computed. The parameter `scale` accepts:
+
+* `"g"`: indicating that the `d` index is computed using the g-method
+* `"q"`: indicating that the `d` index is computed using the q-method
+*  a value: a contast $w$ used to scale the $d$ such that $\delta_0={\delta_w \over w}$
+
+Notice that `scale="g"` is equivalent to `scale=2/sum(abs(cont))` where `cont` are the contrast weights. `scale="q"` is equivalent to `scale=1/sqrt(sum(cont^2))`.
+
+The function, among other things, can be found in the R package `cpower` at [github](https://github.com/mcfanda/cpower)
+
+## Example of the R package
+
+Consider the case in which a researcher observes a pattern of means in a published research in a three-group design $m=\{30,25,21\}$, each group with $n=12$, with pooled standard deviation $s_p=15$. She wishes to compute the effect size $d_g$, deduced the post-hoc power of the observed results, and estimate the required N to attain power at .80 level for a contrast comparing the first again the other two groups, that is, $c=\{1,-1/2,-1/2\}$.  The R code is:
+
+
+
+```{r}
+library(cpower)
+cont<-c(1,-1/2,-1/2)
+m<-c(30,25,21)
+sp<-15
+# compute d_g
+(dg<-d.contr(cont,means=m,sd=sp))
+## post-hoc power
+power.contrast.t(cont,d=dg,n=12)
+## attain power at .80
+power.contrast.t(cont,d=dg,power=.80)
+2*sqrt(5)
+```
+
+Thus, the original studied, based on $n=12$ per cell and an effect size $d_g=.46$, had a power of .249, but to attain a power of .80 one needs n=56 per cell.
+
+# Repeat Measures
+
+$$d_2={{\mu_1-\mu_2}\over{\sqrt{\sigma_1^2+\sigma_1^2-2 \cdot \rho_{12}\sigma_1 \cdot \sigma_2}}}$$
+
+$$d_2={{\mu_1-\mu_2}\over{\sqrt{2 \cdot\sigma^2-2 \cdot \rho_{12} \cdot \sigma^2}}}$$
+$$d_2={{\mu_1-\mu_2}\over{\sqrt{2 \cdot\sigma^2 \cdot (1 - \rho_{12})}}}$$
+
+$$d_0={\sum_i{c_i \cdot \mu_i}\over{\sqrt{k \cdot\sigma^2 - k(k-1) \cdot \rho}}}$$
+
+
+# Other effect size indexes
+
+## Eta-squared
+Correlation effect size indexes (Rosenthal) are often used in contrast analysis. Rosenthal et al defined different indexes, among those most important are the $r_{contrast}$ and $r_{effecsize}$ . They correspond, respectively, to the squared partial correlation and the squared semi-partial correlation between the contrast and the dependent variable, the latter correlation also referred to as partial eta-squared. Partial eta-squared is often found in articles because it is computed by popular software (SPSS) and is used in power analysis (GPower). They are useful, blablabla, but they might pose some difficulty in porting effect sizes from one design to the other. Let's see.
+
+Given the set-up described above the expected eta-squared can be derived recalling that,
+$$p\eta^2={\sigma_c^2 \over {\sigma_c^2+\sigma^2}}$$
+where, Followng Wilcox and T.S. Tian (2001) and Cohen (1988, p.277), $\sigma_c^2={({\Delta \over {k \cdot \sum{c^2}}})^2}$.
+
+thus, we can write $eta_c^2$ as (there's no reference here anywere):
+$$p\eta_c^2={({\Delta \over {\sqrt{k \cdot \sum{c^2}}}})^2 \over {({\Delta \over {\sqrt{k \cdot \sum{c^2}}}})^2+\sigma^2}}$$
+
+or 
+$$\eta_c^2={(\sum_i{c_i \cdot \mu_i})^2 \over {(\sum_i{c_i \cdot \mu_i})^2+{k \cdot \sigma^2\sum_i{c_i^2 }}}}$$
+It is easy to verify that the index is closely related to $d_q$. In fact:
+
+$$\eta_c^2={\Delta^2 \over {\Delta^2+{k \cdot \sigma^2\sum_i{c_i^2 }}}}$$
+Recall that 
+$$\delta_q^2={\Delta^2 \over{c_i^2 \sigma^2}}$$
+and notice that
+$$\eta_c^2={{\Delta^2 \over {\sigma^2 \sum{c_i^2}}} \over{{\Delta^2+ k \cdot \sigma^2\sum{c_i^2} } \over {\sigma^2 \sum{c_i^2}}}}$$
+
+$$\eta_c^2={{\Delta^2 \over {\sigma^2 \sum{c_i^2}}} \over{{{\Delta^2} \over {\sigma^2 \sum{c_i^2}}}+k}}$$
+Thus
+$$\eta_c^2={\delta_q^2 \over {\delta_q^2+k}}$$
+Thus
+$$\eta_c^2({\delta_q^2+k})={\delta_q^2 }$$
+$$\eta_c^2\delta_q^2+k\eta_c^2={\delta_q^2 }$$
+$$\delta_q^2-\eta_c^2\delta_q^2 =k\eta_c^2$$
+$$\delta_q^2 ={k\eta_c^2 \over {1-\eta_c^2}}$$
+
+Now we show that, in the two-groups case, scaling of $\delta$ does not influences $\eta^2$.
+
+For classical Cohen's d we have:
+$:
+$$\eta_d^2={d^2 \over { 4+d^2}}$$
+In particular, to obtain $\eta_d^2$ from $\delta_q$ we need:
+
+$$\eta_d^2={{d_q^2 \over q^2} \over {4+{d_q^2 \over q^2}}}$$
+In two-groups, $q^2=1/2$
+
+$$\eta_d^2={d_q^2 \over {4q^2+{d_q^2}}}={d_q^2 \over {2+d_q^2}}=\eta_q^2$$
+
+## Cohen's f
+
+In two group designs, we have (Cohen, 1988, p.276, eq=8.2.6):
+$$ f={1 \over 2} d$$
+and
+$$ f^2={1 \over 4} d^2$$
+
+because (cohen, 1988,281,eq 8.2.19) 
+$$\eta^2={f^2 \over {1+f^2}}$$
+we have:
+$$f^2={\eta^2 \over {1-\eta^2}}$$
+it follows that:
+$$f^2={{\Delta^2} \over {k \cdot \sigma^2\sum_i{c_i^2 }}}$$
+This shows how to compute the $f^2$ in GPower for a contrast. Furthermore
+$$f={{\Delta} \over {\sqrt{k} \cdot \sigma \sqrt{\sum_i{c_i^2 }}}}={1 \over {\sqrt{k}} } \cdot \delta_q$$
+It is handy to write the previous equation as:
+$$f={1 \over {\sqrt{k}} } \cdot \delta_q={1 \over {\sqrt{k \sum{c_i^2}}} } \cdot \delta_0={ {1 \over \sqrt{k}} \cdot q \cdot \delta_0}$$
+
+# Check results profiling Cohen's examples of Chapter 8 (quality check).
+
+Cohen's _standardized range of population means_ examples can be all dealt with  contrasts approach.
+
+## $\eta^2$ for g-method
+
+To estimate $\eta_c^2$ from a $\delta_g$ computed with the g-method, one simply recalls that $\delta_z=\delta_g \cdot (z/g)$, thus:
+
+$$\eta_c^2={({z \over g}\delta_z)^2 \over {({z \over g}\delta_z)^2+k}}$$
+$$\eta_c^2={{{z^2\delta_z^2} \over g^2} \over {{z^2 \delta_g^2+g^2k}\over g^2}}$$
+$$\eta_c^2={z^2 \delta_g^2 \over {{z^2 \delta_g^2+g^2k}}}$$
+$$\eta_c^2={\delta_g^2 \over {{ \delta_g^2+}{g^2 \over z^2} k}}$$
+
+$$\eta_c^2={\delta_g^2 \over {{ \delta_g^2+{4 k \sum{c_i^2} \over (\sum{|{c_i}|})^2}}}}$$
+which, in the case of two-groups, gives 
+$$\eta_c^2={\delta_g^2 \over {{ \delta_g^2+{4}}}}$$
+as expected.
+
+it follows that
+
+
+
+$$f={ {1 \over \sqrt{k}} \cdot {q \over g} \cdot \delta_g}$$
+
+
+
+```{r echo=FALSE,results='hide'}
+library(cpower)
+data("anchor")
+
+cont=c(1,0,-1)
+obs=tapply(anchor$guess,anchor$anchor,mean)
+sdd<-mean(tapply(anchor$guess,anchor$anchor,sd))
+test.contr(anchor,"guess","anchor",cont)
+n<-length(anchor$id)/length(cont)
+(dz<-d.contr(cont,means = obs,sd=sdd,scale = "z"))
+ci.contr(cont,dz,n,scale="z")
+(dg<-d.contr(cont,means = obs,sd=sdd,scale = "g"))
+(nc<-ci.contr(cont,dg,n,scale="g"))
+ci.contr(cont,dg,n,scale="z")
+
+(nc<-ci.contr(cont,dg,n,scale=1))
+ci.contr(cont,dg,n,scale=1)
+
+
+a<-as.list(q,)
+print(q)
+print(q)
+
+traceback()
+#eta2.contr.d(cont,dq,scale="q")
+#(dq<-d.contr.eta2(cont,ee,scale="g"))
+#eta2.contr.d(cont,dq,scale="g")
+
+
+xname<-"anchor"
+  .data<-model$model
+  .data[,xname]<-factor(.data[,xname])
+  n<-dim(.data)[1]
+  contrasts(.data[,xname])<-contr.custom(cont)
+  new<-update(model,data=.data)
+  (ss<-summary(new))
+  co<-ss$coefficients
+  err<-model$df.residual*(ss$sigma)^2
+  .name<-paste(xname,"cont",sep="")
+  param<-co[.name,][1]*sum(cont^2)
+  ssc<-n*param^2/((sum(cont^2))*length(cont))
+  
+ ssc/(ssc+err)
+
+
+```
+
+as it is well-known (Rosenthal book)
+
+
+```{r}
+#check what the z-method equivalence is
+n<-10000
+d=1
+y1<-rnorm(n,0,1)
+x1<-rep(1,n)
+y2<-rnorm(n,d,1)
+x2<-rep(-1,n)
+y<-c(y1,y2)
+x<-c(x1,x2)
+.x<-factor(x)
+n<-tapply(y,.x,length)
+v<-tapply(y,.x,var)
+nn<-n-1
+k<-2
+df=sum(nn)-k
+(ssd<-sum(v*n)/df)
+ym<-c(rep(mean(y1),n),rep(mean(y2),n))
+sqrt(var(y-ym))
+ssd*sqrt(2)
+#the z is sqrt(sum(v))
+sqrt(mean(v))
+
+
+
+1/1.40
+library(cpower)
+d.contr(c(-1,1),c(mean(y2),mean(y1)),sd=ssd)
+d.contr(c(-1,1),y=y,x=factor(x),scale = "z")
+
+
+
+
+
+
+```
+# Reference
+W.L. Hays, Staistics, Holt, Rinehart & Winston, Fort Worth, 1988

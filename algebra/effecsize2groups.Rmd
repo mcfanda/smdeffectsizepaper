@@ -1,0 +1,54 @@
+---
+title: "Effect sizes for two means"
+author: "Marcello Gallucci"
+date: "February 23, 2018"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Note
+why is :
+$$\eta_d^2={d^2 \over { 4+d^2}}$$
+
+Followng Wilcox and T.S. Tian (2001), $\sigma_\mu^2={({\Delta \over 2})^2}$ and $\sigma_Y^2=\sigma_\mu^2+\sigma$
+
+INOTE: Cohen 8.2.2 p. 275 is wrong
+
+$$\eta_d^2={\sigma_\mu^2 \over \sigma_Y}={({\Delta \over 2})^2 \over {({\Delta \over 2})^2+\sigma^2}}={{\Delta^2} \over {\Delta^2+4\sigma^2}}$$
+thus:
+$$1-\eta^2={{4\sigma^2} \over {\Delta^2+4\sigma^2}}$$
+
+and
+$${\eta^2 \over {1-\eta^2}}={\Delta^2 \over 4\sigma^2}$$
+
+This is $\omega^2$ from Hays (1988). Taking the square root of it:
+
+$$\sqrt{{\Delta^2 \over 4\sigma^2}}={1 \over 2} d$$
+which, by Cohen (1988, p. 276, eq 8.2.5) gives:
+$$\sqrt{{\Delta^2 \over 4\sigma^2}}={1 \over 2} d=f$$
+
+We can then write:
+
+$${\eta^2 \over {1-\eta^2}}={{1 \over 4} d^2}$$
+which means:
+
+$${\eta^2}={{1 \over 4} d^2 \cdot ({1-\eta^2})}$$
+
+$${\eta^2}={{1 \over 4} d^2 - {1 \over 4} d^2 \eta^2}$$
+$${{\eta^2 (4  + d^2)} \over 4}={{1 \over 4} d^2}$$
+$$\eta^2={d^2 \over 4  + d^2}$$
+
+
+## Derived results
+
+### Eta, f and d
+$$\sqrt{{\Delta^2 \over 4\sigma^2}}={1 \over 2} d=f={\eta^2 \over {1-\eta^2}}$$
+
+### expected variances
+
+$$\sigma_\mu^2={({\Delta \over 2})^2}$$
+and
+$$\sigma_Y^2=\sigma_\mu^2+\sigma$$

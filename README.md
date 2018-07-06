@@ -20,4 +20,4 @@ The manuscript is written in Rmarkdown and requires [papaja](https://github.com/
 
 * previous: previous versions
 
-* algebra: additional derivations not crucial for the paper
+* algebra: additional derivations not crucial for the paper but udeful to check the correctness of the paper formulas

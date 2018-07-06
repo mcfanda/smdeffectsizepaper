@@ -1,0 +1,473 @@
+---
+title: "Comparison with Rosenthal et a. contrast effect size indexes"
+subtitle: "Supporting material for Standardized means difference effect size measures for planned comparisons, trend analysis and other applications of contrast analysis"
+author: "mc & mp"
+date: '`r format(Sys.Date(), "%B %d, %Y")`'
+bibliography: ../contrasts.bib
+output: pdf_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+source("../resources/writing_functions.R")
+knit_refs()
+```
+
+# Aim
+
+Here we study some relations between the suggested way to scale the contrast Cohen's d and @rosenthal2000contrasts contrast effect size indexes.
+
+# Definitions
+
+@rosenthal2000contrasts defined three contrast effect size indexes. The $r_{contrast}$, $r_{effect size}$ and $r_{alert}$. Here we focus on $r_{contrast}$, later we show why the other two indexes are not related with $\delta$-like measures. It is crucial to recall that @rosenthal2000contrasts effect size indexes are defined for the sample, not the population. We will denote with $r$ those sample indexes, and with $\rho$ their population counterparts. In the remaning we assume a design with $k$ groups, no covariates, equal cell sizes $n$ and equal within-group variance $\sigma^2$. Sample size is referred to as $N$, with $N=k\cdot n$. The design can be of any shape, but the contrasts are assumed to spread across all $k$ cells. In the document, referenced equations are definitions or results, whereas derivations are not referenced. 
+
+# Effect size index $r_{contrast}$
+
+It is the partial correlation between each score and its associated contrast weight after we have adjusted for non contrast differences among treatment conditions [@rosenthal2000contrasts, p. 38]. It is originally defined in terms of $F$-tests.
+
+
+$$ r_{contrast}=\sqrt{{F_{contrast} \over {F_{contrast}+df_e}}}  \tag{`r eq("rcont")`}$$
+
+where $df_e$ is the error degrees of freedom, which in our case is $df_e=N-k$.
+
+## Aim
+
+Now we show that the population counterpart of $r_{contrast}$ is the partial eta-squared $\eta_p^2$. That is
+$$\rho_{contrast}=\sqrt{\eta_p^2} \tag{`r eq("rfromsigmas0")`}$$
+
+
+## Derivation
+
+Since 
+
+$$F_{contrast}={MS_{contrast}\over{MS_{within}}}={{SS_{contrast}\over{SS_{within}}} \cdot {{N-k} }}$$
+the $r_{contrast}$ index can be written in terms of sum of squares.
+
+$$r_{contrast}=\sqrt{{{{SS_{contrast}\over{SS_{within}}} \cdot {{N-k} }} \over {{{SS_{contrast}\over{SS_{within}}} \cdot {{N-k} }}+N-k}}}$$
+
+$$r_{contrast}=\sqrt{{SS_{contrast}\cdot {{N-k} } \over {{SS_{contrast} \cdot {(N-k)}+(N-k)SS_{within}}}}}$$
+which yields to the results we were looking for.
+$$r_{contrast}=\sqrt{SS_{contrast} \over {SS_{contrast} +SS_{within}}} \tag{`r eq("rfromss")`}$$
+This is the defintion of the partial $\eta_p^2$, after square root. For the population, we have
+
+$$\rho_{contrast}=\sqrt{\sigma^2_{contrast} \over {\sigma_{contrast}^2 +\sigma}}=\sqrt{\eta_p^2} \tag{`r eq("rfromsigmas")`}$$
+
+## Relation between $\rho_{contrast}$ and $\delta$-like measures
+
+As a consequence of the fact that $\rho_{contrast}=\sqrt{\eta_p^2}$, we have that:
+
+
+$$\rho_{contrast}={\delta_z \over \sqrt{{\delta_z^2+k}}} \tag{`r eq("rfromdz")`}$$
+and 
+$$\rho_{contrast}={\delta_g \over \sqrt{{\delta_g^2+{z^2\over{g^2}}k}}} \tag{`r eq("rfromdg")`}$$
+
+## Relation between $r_{contrast}$ and d-like measures (sample version)
+
+For the sample indexes, we have
+
+$$r_{contrast}={d_z \over \sqrt{{d_z^2+k} \cdot {{N-k} \over N}}}$$
+$$r_{contrast}={d_z \over \sqrt{{d_z^2+k} \cdot {{k(n-1)} \over nk}}}$$
+which yields
+$$r_{contrast}={d_z \over \sqrt{{d_z^2+k} \cdot {{(n-1)} \over n}}} \tag{`r eq("rfromdzs")`}$$
+Reversing:
+
+$${\delta_z}=\sqrt{k \cdot {n-1 \over n}} \cdot { r_{contrast} \over \sqrt{1-r_{contrast}^2}} \tag{`r eq("zfromr")`}$$
+
+For the g-method, we have
+$$r_{contrast}={d_g \over \sqrt{{d_g^2+{g^2 \over z^2}k} \cdot {{(n-1)} \over n}}} \tag{`r eq("rfromdgs")`}$$
+
+$${\delta_z}={g \over z}\sqrt{k \cdot {n-1 \over n}} \cdot { r_{contrast} \over \sqrt{1-r_{contrast}^2}} \tag{`r eq("gfromr")`}$$
+
+
+```{r, results='hide',echo=FALSE, warning=FALSE,message=FALSE }
+library(cpower)
+
+###  a check ###
+k=4
+mu<-c(10,rep(5,k-1))
+cont<-c(1,rep(-1,k-1)/(k-1))
+(g<-d.contr(cont,mu,sd=20,scale = "g"))
+(z<-d.contr(cont,mu,sd=20,scale = "z"))
+sqrt(eta2.contr.d(cont,g))
+z/(sqrt(z^2+k))
+sg<-2/sum(abs(cont))
+sz<-1/sqrt(sum(cont^2))
+u<-(sg/sz)^2
+g/(sqrt(g^2+(k*u)))
+z/(sqrt(z^2+(k)))
+
+##########
+```
+
+# Behavior
+
+## Comparison within the same design
+
+The behavior of the three indexes, $\delta_g$, $\delta_z$ and $\rho_{contrast}$ is quite obvious when they are compared within the same design (i.e. for a given $k$). Both $\delta_g$, $\delta_z$ increase linearly with $C_k$, other things being equal, and thus any two effect sizes indexes can be compared independently  of the size of their absolute values, because their difference depends only on the difference between contrast values $C_k$.
+
+The $\rho_{contrast}$ is bounded between -1 and 1, and thus its increment is not linearly related with $C_k$. Thus, the comparison between any two $\rho_{contrast}$ values depends on the difference in $C_k$ and the absolute values of the  $\rho_{contrast}$ indexes. In particular, the larger $\rho_{contrast}$, the smaller is the increment for a given increment of $C_k$.
+
+Let $C_k$ be the contrast value of a contrast 1, and $C_k+\epsilon$ the contrast value of contrast 2. Assume $g=1$. The method-g effect size, for the two contrasts, is
+
+$$\delta_{g1}={C_k \over \sigma} \quad; \quad \delta_{g2}={C_k +\epsilon \over \sigma}$$ 
+
+whose absolute difference is clearly $|\epsilon|/\sigma$. For $r_{contrast}$ we have
+
+$$r_{g1}={C_k  \over \sqrt{C_k^2 +  k \sigma^2 }}\quad; \quad r_2={C_k+\epsilon  \over \sqrt{(C_k+\epsilon)^2 +  k \sigma^2 }}$$ 
+whose difference 
+$${C_k^2  \over {C_k^2 +  k \sigma^2 }}-{(C_k+\epsilon)^2  \over {(C_k+\epsilon)^2 +  k \sigma^2 }}$$ 
+is related to $\epsilon$ and the magnitude of $\delta_{g1}$ as shown in Figure \ref{fig:a}.
+
+```{r label=fig:a ,results='asis',echo=FALSE, warning=FALSE,message=FALSE,  fig.cap="Differences in r-contrast as a function of difference in delta indexes for different size of delta",fig.height=4,fig.width=8}
+
+
+library(ggplot2)
+
+eps<-seq(0,3,by=.1)
+d1<-1
+d2<-d1+eps
+de<-d1-d2
+r1<-d1/sqrt(d1^2+4)
+r2<-d2/sqrt(d2^2+4)
+rd<-r2-r1
+dat<-cbind(rd,d1,eps)
+d1<-2
+d2<-d1+eps
+de<-d1-d2
+r1<-d1/sqrt(d1^2+4)
+r2<-d2/sqrt(d2^2+4)
+rd<-r2-r1
+dat<-rbind(dat,cbind(rd,d1,eps))
+
+d1<-3
+d2<-d1+eps
+de<-d1-d2
+r1<-d1/sqrt(d1^2+4)
+r2<-d2/sqrt(d2^2+4)
+rd<-r2-r1
+dat<-rbind(dat,cbind(rd,d1,eps))
+dat<-as.data.frame(dat)
+library(ggplot2)
+gg<-ggplot(dat,aes(eps,rd,group=factor(d1)))+geom_point(aes(shape=factor(d1)))+geom_line()
+gg<-gg+ylab("Difference in rho-contrast")+xlab((expression(epsilon==delta[2]-delta[1])))+labs(shape=expression(delta[1] ~size))
+gg
+
+```
+
+Clearly, the increment in $\rho$ for a given $\epsilon$ depends on how large is $\rho$ that is incremented.
+
+\newpage
+
+
+
+## Comparison across different designs
+
+It is interesting to show how those indexes relate in particular situations, where the intuition may lead to false expectations. 
+
+### Example 1: Same mean difference across different designs
+
+Consider the case where the same contrast value $C_k=\sum{c_i \cdot \mu_i}$ is expected across designs with different $k$. Let $c_1=1$ and $c_i=-1/(k-1)$ for $1>i\ge k$ 
+
+To give an example, assume $\mu_1=10$ and $\mu_i=5$ for $1>i\ge k$, and $\sigma=20$. Four possible sets of expected means for different $k$ is shown in Table 1.
+
+```{r, results="asis",echo=FALSE, warning=FALSE,message=FALSE}
+mm<-c(10,rep(5,1))
+table<-matrix("",ncol=6,nrow=3)
+table[1,c(1,2)]<-c(10,rep(5,1))
+table[2,1:4]<-c(10,rep(5,3))
+table[3,1:6]<-c(10,rep(5,5))
+rownames(table)<-c("k=2","k=4","k=6")
+colnames(table)<-c("m1","m2","m3","m4","m5","m6")
+library(xtable)
+options(xtable.comment = FALSE)
+tab<-xtable(table,caption="Example 1: same mean comparison spread across different number of groups")
+print(tab)
+
+```
+
+For the g-method we have that $g={2 \over (1+(k-1) \cdot (1/(k-1)}=1$, thus gives:
+$$\delta_{gk}={C_k \over \sigma} \tag{`r eq("ex1deltag")`}$$
+For any $k$. The z-method gives:
+
+$$\delta_{zk}={C_k \over {\sqrt{\sum{c_i^2}} \cdot\sigma}}={C_k \over {\sqrt{1+{k-1 \over (k-1)^2}} \cdot\sigma}}$$
+$$\delta_{zk}={C_k \over {\sqrt{{(k-1)+1} \over (k-1)} \cdot\sigma}}$$
+$$\delta_{zk}={C_k \over {\sqrt{{k \over (k-1)} \cdot \sigma}}} \tag{`r eq("ex1deltaz")`}$$
+
+The behavior of $\delta_g$ as a function of the number of group is clear: it does not change (Figure 1). The $\delta_z$ differs because of  $k/(k-1)$ in the denominator. Becuase $k/(k-1)$ becomes smaller with increasing $k$, $\delta_z$ is smaller than $\delta_g$ for small number of groups, increases with $k$, and  converges to $\delta_g$ as the number of group becomes very large (cf. Figure 1).
+
+
+```{r ,results='asis',echo=FALSE, warning=FALSE,message=FALSE,  fig.cap="Example 1: d-like effect size as a function of number of groups",fig.height=4,fig.width=8}
+
+
+library(ggplot2)
+z<-NULL
+g<-NULL
+eta<-NULL
+NK<-35
+for (k in 2:NK) {
+mu<-c(10,rep(5,k-1))
+cont<-c(1,rep(-1,k-1)/(k-1))
+g<-rbind(g,d.contr(cont,mu,sd=20,scale = "g"))
+lz<-d.contr(cont,mu,sd=20,scale = "z")
+z<-rbind(z,lz)
+eta<-c(eta,eta2.contr.d(cont,lz,scale="z"))
+}
+dat<-as.data.frame(cbind(c(g,z),c(rep("g",(NK-1)),rep("z",(NK-1))),c(1:(NK-1),1:(NK-1))))
+dat$V3<-as.numeric(as.character(dat$V3))
+dat$V1<-as.numeric(as.character(dat$V1))
+                   
+gg<-ggplot(dat,aes(V3,V1,group=V2))+geom_point(aes(shape=V2))+geom_line()
+gg<-gg+ylab("d effec size")+xlab("k # of groups")+labs(shape="Method")
+gg
+
+```
+
+
+The corresponding $\rho_{contrasts}$ can be derived as:
+
+$$\rho_{k}^2={{C_k^2 \over {{k \over (k-1)} \cdot \sigma^2}} \over {{C_k^2 \over {{k \over (k-1)} \cdot \sigma^2}}+k}} $$
+$$\rho_{k}^2={C_k^2 \over {{C_k^2 \cdot}+{k^2 \over {k-1}} \sigma^2}} $$
+$$\rho_{k}={C_k \over \sqrt{{C_k^2 \cdot}+{k^2 \over {k-1}} \sigma^2}} \tag{`r eq("ex1r")`}$$
+It can be noticed that $C_k$ does not change with $k$, but the weight of the error variance, $k^2/(k-1)$ becomes larger and larger whith increasing $k$, making the coefficient to decrease with $k$.
+
+Its behavior for the present case is shown in Figure 2:
+
+```{r ,results='asis',echo=FALSE, warning=FALSE,message=FALSE,  fig.cap="Example 1: Population r-contrast effect size as a function of number of groups",fig.height=4,fig.width=8}
+
+
+dat<-as.data.frame(cbind(sqrt(eta),1:length(eta)))
+
+gg<-ggplot(dat,aes(V2,V1))+geom_point()+geom_line()
+gg<-gg+ylab("r-contrast effec size")+xlab("k # of groups")
+gg
+
+```
+
+What happens is that as the number of groups increases, the error sum of squares increases without increasing the contrast sum of squares, thus the effect size decreases. 
+
+\newpage
+## Example 2: Two means comparison embedded in different designs
+
+Another interesting case is when the researcher is interested in the same comparison $C_k=\mu_1 -\mu_2$, but the comparison is embedded in a larger design with $k$ groups. Thus, for any $k$, we have $C_k=\mu_1 -\mu_2+\sum{0 \cdot \mu_i}$, with $2>i\ge k$. It is simple to verify that:
+
+$$\delta_{zk}={C_k \over {\sqrt{2} \cdot \sigma}}  \tag{`r eq("ex2dz")`}$$
+and
+$$\delta_{gk}={C_k \over {\sigma}}  \tag{`r eq("ex2dg")`}$$
+for any $k$.
+
+However, the Rosenthal's contrast effect size will change as the number of groups increases. In particular
+
+$$ \rho_{contrast}={\delta_z\over\sqrt{\delta_z^2+k}}$$
+$$ \rho_{contrast}^2={{C_k^2\over{2 \sigma^2}} \over {C_k^2\over{2\sigma^2}}+k}$$
+$$ \rho_{contrast}=\sqrt{C_k^2 \over {C_k^2+2k\sigma^2}} \tag{`r eq("ex2r")`}$$
+
+which become smaller and smaller as the number of groups increases. Note that this does not imply any deficiency in $\rho_{contrast}$. It is a measure of variance explained, thus it is correct that a single comparison should explain less and less variance as the group number increases. It is a different index as compared with the $\delta$-like indexes, and conveys different information.
+
+## Example 3: Same linear trend
+
+We now consider another example, where the same linear trend is compared across differnt designs. Let assume we have k group means $\mu_i$, such that any two subsequent means are $\phi$ units apart, that is, $\mu_i=i\cdot\phi$. Contrast weights are linear trend weights, $c_i=i-(1+k)/2$.
+
+Altough it may not seem intuitive at first glance, this set-up implies an increasingly stronger effect as the number of the groups increases. This is because as the number of groups increases, the linear trend defines a larger difference between the first and the last group. This can be seen (Figure 4) by ploting the expected means, for increasingly largeer designs, only for the two extreme groups.
+
+```{r ,results='asis',echo=FALSE, warning=FALSE,message=FALSE,  fig.cap="Example 3: extreme groups trend as a function of number of groups",fig.height=4,fig.width=8}
+
+
+library(ggplot2)
+
+
+means<-NULL
+phi=2
+up=c(2,4,6,8,10)
+run<-0
+dg<-NULL
+dz<-NULL
+eta<-NULL
+for (k in up) {
+run<-run+1
+i<-1:k
+cont<-i-((1+k)/2)
+mm<-i*phi
+emm<-mm[c(1,length(mm))]
+#mm<-(mm-mean(mm))/sd(mm)
+one<-cbind(means=emm,k=1:2,run=k)
+means<-rbind(means,one)
+dg<-c(dg,d.contr(cont,mm,sd=8,scale="g"))
+dz<-c(dz,d.contr(cont,mm,sd=8,scale="z"))
+eta<-c(eta,eta2.contr.d(cont,d.contr(cont,mm,sd=8,scale="g")))
+}
+
+dat<-as.data.frame(means)  
+dat$run<-factor(dat$run)
+dat$k<-factor(dat$k)
+levels(dat$k)<-c("First group","Last group")
+gg<-ggplot(dat,aes(k,means,group=run))+geom_point(aes(shape=run))+geom_line()
+gg<-gg+ylab("means")+xlab("k # of groups")+labs(shape="k")
+gg
+
+```
+
+Accordingly, all the effect size indexes increase with $k$. 
+
+```{r ,results='asis',echo=FALSE, warning=FALSE,message=FALSE,  fig.cap="d-like effect size as a function of number of groups",fig.height=4,fig.width=8}
+
+d<-c(dg,dz)
+method<-rep(c("g","z"),each=length(up))
+dat<-as.data.frame(cbind(d=d,k=rep(up,2),method=method))
+dat$k<-as.numeric(as.character(dat$k))
+dat$d<-as.numeric(as.character(dat$d))
+
+gg<-ggplot(dat,aes(k,d,group=method))+geom_point(aes(shape=method))+geom_line()
+gg<-gg+ylab("d effec size")+xlab("k # of groups")+labs(shape="method")
+gg
+
+```
+
+```{r ,results='asis',echo=FALSE, warning=FALSE,message=FALSE,  fig.cap="r-constrast effect size as a function of number of groups",fig.height=4,fig.width=8}
+
+dat<-as.data.frame(cbind(eta=sqrt(eta),k=up))
+gg<-ggplot(dat,aes(k,eta))+geom_point()+geom_line()
+gg<-gg+ylab("r-contrast effec size")+xlab("k # of groups")+labs(shape="method")
+gg
+
+```
+
+\newpage
+
+### Formal derivation
+
+We can now reach the same results a bit more formally. The contrast value $C_k$ is:
+
+$$C_k=\sum{[({i-(1+k)/2})\cdot i\cdot \phi}]={\phi \over 2}  \cdot [{\sum (2i-1-k)\cdot i}]$$
+$$C_k={\phi \over 2}  \cdot [{\sum (2i^2-i-ki)}]$$  
+$$C_k={\phi \over 2}  \cdot [{2\sum (i^2)-\sum (i)-k\sum{(i)}}]$$
+$$C_k={\phi \over 2}  \cdot [{2\sum (i^2)-(1-k)\sum (i)}]$$
+
+now, because $\sum{i^2}={k(k+1)(2k+1) \over 6}$ and $\sum{i}={k(k+1) \over 2}$ we have:
+
+
+$$C_k={{\phi \over 2} \cdot [{2 {k(k+1)(2k+1) \over 6}}-{(1+k){k(k+1)}\over{2}}]}$$
+$$C_k={{\phi \over 2} \cdot k(k+1)[{ {(2k+1) \over 3}}-{(1+k)\over{2}}]}$$
+$$C_k={{\phi \over 2} \cdot k(k+1)[ {(4k+2-3-3k)\over{6}}]}$$
+
+$$C_k={{\phi \over 2} \cdot k(k+1)[ {(k-1)\over{6}}]}$$
+$$C_k={{\phi \over 12} \cdot k(k+1)(k-1)} \tag{`r eq("ex3cv")`}$$
+
+For the g-method, we need the sum of the obsolute contrasts weights. Consider k as even (when it is odd similar derivation can be otained showing the same properties), and note that for the first half of the weights, their sum is
+
+$$\sum_{i=1}^{k/2}(i-(1+k)/2)={1\over 2}\sum_{i=1}^{k/2}(2i)-k/2-k^2/2$$
+Recall that the sum of the first $k/2$ $i$ is:
+$${1\over 2}\cdot {k\over2}\cdot{{k-2}\over2}={k(k-2)\over{8}}$$
+than, the sum of the first half contrast weights becomes:
+$$\sum(i-(1+k)/2)={1 \over 2} [2 \cdot {k(k-2)\over{8}}-{k\over 2}-{k^2 \over 2}]$$
+
+$$\sum(i-(1+k)/2)={1 \over 2} [{k \cdot{{k-2-2-2k }\over 4}}]$$
+$$\sum(i-(1+k)/2)={-{k\over 2}{{k}\over 4}}={k^2 \over 8}$$
+Obviously, the second half has the same sum with oppositve sign. Being the sum carried over the absolute values, this gives:
+
+$$\sum|(i-(1+k)/2)|={k^2 \over 4}$$
+
+Thus, the g multiplier is $g=8/k^2$. and the effect size is:
+
+$$\delta_g={{8\cdot \phi \cdot k(k+1)(k-1)} \over{12 \cdot k^2 \cdot \sigma}}$$
+$$\delta_g={{2\cdot \phi \cdot (k+1)(k-1)} \over{3 \cdot k \cdot \sigma}} \tag{`r eq("ex3dg")`}$$
+```{r, results='hide',echo=FALSE, warning=FALSE,message=FALSE, }
+library(cpower)
+
+###  a check ###
+
+k<-4
+i<-1:k
+cont<-i-((1+k)/2)
+phi=3
+means<-i*phi
+means
+(cc<-sum(cont*means))
+k^2*1/4
+sum(abs(cont))
+d.contr(cont,means,sd=100)
+2*(phi*(k+1)*(k-1))/(3*k*100)
+##########
+
+
+```
+
+
+We can see that $\delta_g$ increases linearly with $k$, as the example in the Figure 4 shows. For the z-method, we need $\sqrt{\sum c^2}$, that is:
+
+$$\sqrt{\sum{(i-(1+k)/2)^2}}=\sqrt{\sum{(i^2)}-{{k(1+k)^2} \over 4}}$$
+because $\sum{i^2}={k(k+1)(2k+1) \over 6}$ and $\sum{i}={k(k+1) \over 2}$ we have:
+
+$$=\sqrt{{k(k+1)(2k+1) \over 6}-{k(1+k)^2\over 4}}$$
+
+$$=\sqrt{{2k(k+1)(2k+1) -3k(1+k)^2\over 12}}$$
+$$=\sqrt{k(1+k){2(2k+1) -3(1+k)\over 12}}$$
+$$=\sqrt{k(1+k){4k+2 -3-3k\over 12}}$$
+$$\sqrt{\sum c_i^2}=\sqrt{{k(1+k)(k-1)}\over 12}$$
+```{r ,results='hide',echo=FALSE, warning=FALSE,message=FALSE}
+# checks 
+k<-7
+i<-1:k
+cont<-i-((1+k)/2)
+sum(cont^2)
+k*(k+1)*(k-1)/12
+```
+
+therefore:
+$$\delta_z={{{\phi} \cdot k(k+1)(k-1)} \over {\sigma \cdot 12\sqrt{k(k+1)(k-1)\over 12}}}$$
+$$\delta_z={{{\phi} \cdot k(k+1)(k-1)} \over {\sigma \cdot \sqrt{12\cdot k(k+1)(k-1)}}}$$
+$$\delta_z={{{\phi \over \sigma}{ \sqrt{k(k+1)(k-1) \over 12}}}}\tag{`r eq("ex3dz")`}$$
+which increases non-linearly with $k$, as shown in Figure 4.
+
+```{r ,results='hide',echo=FALSE, warning=FALSE,message=FALSE}
+# checks 
+library(cpower)
+k<-20
+i<-1:k
+cont<-i-((1+k)/2)
+phi=3
+means<-i*phi
+sdw<-10
+d.contr(cont,means,sd=sdw,scale="z")
+(phi/sdw)*sqrt(k*(k-1)*(k+1)/(12))
+d.contr(cont,means,sd=sdw,scale="g")
+
+
+```
+
+Finally, the $\rho_{contrast}$ can be obtained as
+
+
+$$\rho_{contrast}^2={{{\phi^2 \over \sigma^2}{ {k(k+1)(k-1) \over 12}}} \over {{\phi^2 \over \sigma^2}{ {k(k+1)(k-1) \over 12}}}+k}$$
+
+$$\rho_{contrast}^2={{{\phi^2}{ {k(k+1)(k-1)}}} \over {{\phi^2 }{ {k(k+1)(k-1)}}}+12 k\sigma^2}$$
+$$\rho_{contrast}^2={{{\phi^2}{ {(k+1)(k-1)}}} \over {{\phi^2 }{ {(k+1)(k-1)}}}+12 \sigma^2}$$
+$$\rho_{contrast}={{{\phi}\sqrt{ {k(k+1)(k-1)}}} \over \sqrt{{{\phi^2 }{ {k(k+1)(k-1)}}}+12 k\sigma^2}}$$
+
+which increases with k. However it does that not increase linearly because is bounded to 1.
+
+
+
+# Other effect size indexes defined by Rosenthal et al.
+
+$r_{effectsize}$ does not remove the variance explained by other sources other than the contrast, thus its definition is:
+
+$$r_{effectsize}=\sqrt{ F_{contrast} \over {F_{contrast}+F_{noncontrast} df_{noncontrast}+df_e}}$$
+by definition the numerator is the overal variance of the dependen variable, i.e. $SS_{tot}$. Thus
+
+$$r_{effectsize}=\sqrt{ SS_{contrast} \over {SS_{tot}}}$$
+
+Now, this effect size does not have a neat correspondence with any $d$ measure, besides for the trivial case where $k=2$, in which we have:
+
+$$r_{effectsize}={d_z \over \sqrt{d_z^2+2}}$$
+
+The reason is that any Cohen's d considers only the within subject variance, thus the scale of the effect size cannot make it equivalent to the total variance. 
+
+The last effect size index defined by Rosenthal et al is the $r_{alert}$
+
+$$r_{alert}=\sqrt{SS_{contrast} \over SS_{between} } $$
+which is clealy not related with the within-subject variability, and thus has no relation with $\delta$-like measures. 
+
+# References
+

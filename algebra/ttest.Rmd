@@ -1,0 +1,73 @@
+---
+title: "ttest"
+author: "Marcello Gallucci"
+date: "February 14, 2018"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+# t-test two means
+
+$$s_p={\sqrt{{(n_1-1)s_1^2+(n_2-1)s_2^2} \over {n_1+n_2-2}}}$$
+
+$$t_{N-2}={{m_1-m_2} \over {s_p \cdot {\sqrt{{1 \over n_1}+{1 \over n_2}}}}}$$
+
+
+
+$$D={\sqrt{{{(n_1-1)s_1^2+(n_2-1)s_2^2} \over {n_1+n_2-2}} \cdot {{1 \over n_1}+{1 \over n_2}}}} $$
+$$Den={\sqrt{ {{(n-1) \cdot 2 \cdot s^2} \over {n_1+n_2-2}} \cdot {{2 \over n}}}} $$
+$$Den={ {\sqrt{ {4 \cdot s^2 \over 2({n-1})} \cdot {(n-1) \over n}}}}$$
+$$t_{N-2}={{m_1-m_2} \over{ 2 \cdot {\sqrt{ {s^2 \over 2n}}}}}$$
+$$d={{m_1-m_2} \over{ \sqrt{ s^2}}}$$
+
+
+$$t_{N-2}={{d \over{2}} \cdot \sqrt{ 2n}}$$
+$$d \approx {2\cdot t_{N-2} \over{\sqrt{N}}}$$
+
+$$d \approx t_{N-2} \cdot \sqrt{2 \cdot 2 \over{2{(n})}}$$
+$$d \approx t_{N-2} \cdot \sqrt{2 \over{{n}}}$$
+
+# t-test contrast
+
+$$s_p={\sqrt{\sum_i{(c_i^2(n_i-1)s_i^2)} \over {(\sum_i{n_i})-k}}}$$
+
+$$s_p={\sqrt{(n_i-1)s_i^2 \cdot \sum_i{c_i^2} \over {N-k}}}$$
+
+$$s_p={\sqrt{(n-1)s^2 \cdot \sum_i{c_i^2} \over {N-k}}}$$
+
+$$t_{N-2}={{\sum_i{c_i \cdot m_i} \over {s_p \cdot {\sqrt{ \sum_i{1 \over n}}}}}}={{\sum_i{c_i \cdot m_i} \over {s_p \cdot {\sqrt{ {k \over n}}}}}}$$
+
+
+$$Den={\sqrt{{(n-1)s^2 \cdot \sum_i{c_i^2} \over {N-k} \cdot {k \over n}}}} $$
+
+$$Den={\sqrt{ k \cdot  \sum_i{c_i^2} \cdot {s^2 \over k({n-1})} \cdot {(n-1) \over n}}}$$
+
+
+$$Den ={\sqrt{  \sum_i{c_i^2} \cdot {s^2 \over {n}}}}$$
+
+
+$$t_{N-2}={\sum_i{c_i \cdot m_i} \over{a}}$$
+
+$$t_{N-2} \approx {\sum_i{c_i \cdot m_i} \over{ {\sqrt{ k \cdot  \sum_i{c_i^2} \cdot {s^2 \over {N-2}} }}}}$$
+$$t_{N-2} \approx {\sum_i{c_i \cdot m_i} \over{ {\sqrt{s^2 \sum_i{c_i^2}} \cdot \sqrt{ k \over {N-k}} }}}$$
+$$d_q={\sum_i{c_i \cdot m_1} \over{ \sqrt{s^2 \cdot \sum_i{c^2} }}}$$
+
+$$t_{N-2} \approx {d_q \cdot {\sqrt{ {N-k} \over k}}}$$
+
+$$d_0 \approx {t_{N-2} \cdot \sqrt{k \over {N-k} }}$$
+
+Check it works for stadard d with $c=\{1,-1\}$, where $\sum_i{c_i^2=2}$
+
+Note that we should distinguish between $d_0$ and $d_q$. 
+
+$$d_0={{m_i-m_2} \over {s}}$$
+
+$$d_q={{m_i-m_2} \over {\sqrt{\sum_i{c_i^2}} \cdot s}}$$
+
+
+$$d \approx {{\sum_i{c_i \cdot m_i} \over{ {\sqrt{s^2 \sum_i{c_i^2}} \cdot \sqrt{ k \over {N-k}} }}} \cdot {\sqrt{k \over {N-2}}}}={\sum_i{c_i \cdot m_i} \over{ {s \cdot \sqrt{ \sum_i{c_i^2}}  }}}$$
+which is $d_q$, not $d_0$. To obtain $d_0$ we need
+
+$$d_0 \approx {t_{N-2} \cdot \sqrt{{k \over {N-k}} \cdot \sum_i{c_i^2}}}$$
+

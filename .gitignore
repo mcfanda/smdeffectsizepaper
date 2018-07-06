@@ -38,9 +38,11 @@ rsconnect/
 private/
 pics/
 bib/
+previous/
 *_files/
 *.tex
 *.html
 *.log
+*.pdf
 
 .Rproj.user
