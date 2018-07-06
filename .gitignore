@@ -43,6 +43,5 @@ previous/
 *.tex
 *.html
 *.log
-*.pdf
 
 .Rproj.user
