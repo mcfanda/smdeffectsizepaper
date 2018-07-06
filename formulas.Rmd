@@ -11,7 +11,7 @@ editor_options:
   chunk_output_type: console
 ---
 
-```{r setup, echo=FALSE}
+```{r setup, echo=FALSE, include=FALSE}
 library("papaja")
 knitr::opts_chunk$set(echo = TRUE)
 source("resources/writing_functions.R")
@@ -22,7 +22,7 @@ ref_paper<-"smdeffectsizepaper"
 
 # Aim
 
-Here we derive some of the most important formula in the paper. In this document, equations referred to with REF. # indicates the reference number of the formula in the original paper. 
+Here we derive some of the most important formula in the paper. In this document, equations referred to with REF. # are equations of the original paper; the number # is the reference number of the equation in the original paper. 
 
 # Contrasts analysis background
 
@@ -227,19 +227,19 @@ $\hfill\blacksquare$
 
 # Power Analysis
 
-Let $\lambda_k$ be the noncentrality parameter of the $t_{k(n-1)}$ distribution associated with the t-test for $d_z$.
+Let $\lambda_t$ be the noncentrality parameter of the $t_{k(n-1)}$ distribution associated with the t-test for $d_z$.
 
 ### Result
-$$\lambda_k={\sqrt{n} \cdot d_z} \tag{`r ref_tag("noncentdz")`}$$
+$$\lambda_t={\sqrt{n} \cdot d_z} \tag{`r ref_tag("noncentdz")`}$$
 
 
 Following @liu2013power, page 87, EQ 4.25,
 
-$$\lambda_k={{\sum{c_i\mu_i}}\over{\sqrt{\sigma^2({\sum{c_i^2\over n_i}})}}}$$
+$$\lambda_t={{\sum{c_i\mu_i}}\over{\sqrt{\sigma^2({\sum{c_i^2\over n_i}})}}}$$
 which simplifies for equal cell size to:
-$$\lambda_k={\sqrt{n} \cdot {{\sum{c_i\mu_i}}\over{\sqrt{\sigma^2 \cdot {\sum{c_i^2}}}}}}$$
+$$\lambda_t={\sqrt{n} \cdot {{\sum{c_i\mu_i}}\over{\sqrt{\sigma^2 \cdot {\sum{c_i^2}}}}}}$$
 and thus
-$$\lambda_k={\sqrt{n} \cdot d_z}$$
+$$\lambda_t={\sqrt{n} \cdot d_z}$$
 $\hfill\blacksquare$
 
 ### Paper result
