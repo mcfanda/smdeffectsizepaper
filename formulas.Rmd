@@ -6,7 +6,7 @@ date: '`r format(Sys.Date(), "%m, %d, %Y")`'
 bibliography: contrasts.bib
 header-includes:
    - \usepackage{amsmath}
-output: github_document
+output: pdf_document
 editor_options: 
   chunk_output_type: console
 ---
