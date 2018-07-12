@@ -22,7 +22,7 @@ ref_paper<-"smdeffectsizepaper"
 
 # Aim
 
-Here we derive some of the most important formula in the paper. In this document, equations referred to with REF. # are equations of the original paper; the number # is the reference number of the equation in the original paper. 
+Here we derive some of the most important formulae in the paper. In this document, equations referred to with REF. # are equations of the original paper; the number # is the reference number of the equation in the original paper. 
 
 # Contrasts analysis background
 
@@ -54,7 +54,7 @@ If we set $z={1/\sqrt{\sum{c_i^2}}}$, we obtain:
 $$\delta_z={z \cdot \delta_0} \tag{`r ref_tag("dzshort")`}$$
 
 ### Result in the paper
-$$f={{1 \over {\sqrt{k}} } \cdot \delta_z} \tag{`r ref_tag("ztof")`}$$
+$$f={{1 \over {\sqrt{k}} } \cdot |\delta_z|} \tag{`r ref_tag("ztof")`}$$
 
 ### Derivation
 
@@ -71,11 +71,11 @@ $$\sigma_{\psi}={\sqrt{{(\sum{c_i\mu_i})^2\over k\sum{c_i^2}}}}$$
 thus,
 $$\sigma_{\psi}={|\sum{c_i\mu_i}|\over\sqrt{ k\sum{c_i^2}}}$$
 and 
-$$f={\sigma_{\psi} \over \sigma}={|\sum{c_i\mu_i}|\over\sqrt{ k\sum{c_i^2}}}={{1 \over \sqrt{k}} \cdot \delta_z}$$
+$$f={\sigma_{\psi} \over \sigma}={\sum{c_i\mu_i}\over\sqrt{ k\sum{c_i^2}}}={{1 \over \sqrt{k}} \cdot \delta_z}$$
 $\hfill\blacksquare$
 
 However, it is interesting to show the same result without dealing with sample estimates. Consider a regression with $k-1$ contrasts, one is the contrast of interest $\psi$, and the others, $\phi_i$, are contrasts orthogonal to each other and to the contrast of interest.  
-The total expected variance of the $y$ variable will be:
+The total variance of the $y$ variable will be:
 $$\sigma_t^2=\sigma_\psi^2+\sum{\sigma_{\psi_i}^2}+\sigma^2$$
 because of the orthogonality of the contrasts. The population $b$ coefficient associated with $\psi$ is:
 $$b_\psi={\sum{c_i\mu_i} /k \over \sum{c_i^2}/k}={\sum{c_i\mu_i} \over \sum{c_i^2}}$$
@@ -84,7 +84,7 @@ $$\sigma_\psi^2=b_\psi^2 \cdot \sigma_c^2={(\sum{c_i\mu_i})^2 \over (\sum{c_i^2}
 Taking the square root yields:
 $$\sigma_\psi= {1 \over \sqrt{k}} \cdot {|\sum{c_i\mu_i}| \over \sqrt{\sum{c_i^2}}}$$
 because we were looking for the $f=\sigma_\psi/\sigma$ ratio, we obtain
-$$f={\sigma_\psi \over \sigma}={1 \over \sqrt{k}} \cdot {\sum{c_i\mu_i} \over \sigma \sqrt{\sum{c_i^2}}}={1 \over \sqrt{k}} \cdot |\delta_z|$$
+$$f={\sigma_\psi \over \sigma}={1 \over \sqrt{k}} \cdot {|\sum{c_i\mu_i}| \over \sigma \sqrt{\sum{c_i^2}}}={1 \over \sqrt{k}} \cdot |\delta_z|$$
 $\hfill\blacksquare$
 
 
@@ -135,20 +135,20 @@ $$\eta^2={\delta_z^2 \over {\delta_z^2+k}}\tag{`r ref_tag("eta")`}$$
 
 
 $$\eta^2={\sigma_\psi^2 \over {\sigma_\psi^2+\sigma^2}}$$
-we have shonw that
+we have shown that
 $$\sigma_\psi^2= {1 \over k} \cdot {(\sum{c_i\mu_i})^2 \over {\sum{c_i^2}}}$$
 thus
 $$\eta^2={{1 \over k} \cdot {(\sum{c_i\mu_i})^2 \over {\sum{c_i^2}}} \over {{1 \over k} \cdot {(\sum{c_i\mu_i})^2 \over {\sum{c_i^2}}}+\sigma^2}}=$$
 $$={{1 \over k} \cdot {(\sum{c_i\mu_i})^2 \over {\sum{c_i^2}}} \over {(\sum{c_i\mu_i})^2+k\sigma^2\sum{c_i^2}  \over{k\sum{c_i^2}}}}=$$
 $$={{(\sum{c_i\mu_i})^2 } \over {(\sum{c_i\mu_i})^2+k\sigma^2 \sum{c_i^2} }}=$$
-let's devide numerator and denominator by $\sigma^2 \sum{c_i^2}$
+let's divede numerator and denominator by $\sigma^2 \sum{c_i^2}$
 $$={{(\sum{c_i\mu_i})^2 \over \sigma^2 \sum{c_i^2} } \over {{(\sum{c_i\mu_i})^2 \over \sigma \sum{c_i^2}}+{k\sigma^2 \sum{c_i^2} \over \sigma^2 \sum{c_i^2}}}}=$$
 $$={{\delta_z^2} \over {\delta_z^2+k}}$$
 $\hfill\blacksquare$
 
 ## Scaled effect size measure
 
-A different method of scaling the constrat effect size measure which guarantees better interpretability and comparability can be suggested. Let's $g={2 \over \sum_i{\left|{c_i}\right|}}$, where $|c_i|$ indicates the absolute value of $c_i$, then  
+A different method of scaling the contrast effect size measure which guarantees better interpretability and comparability can be suggested. Let's $g={2 \over \sum_i{\left|{c_i}\right|}}$, where $|c_i|$ indicates the absolute value of $c_i$, then  
 
 $$\delta_g=g \cdot \delta_0={2 \over \sum{|{c_i}|}} \cdot {{\sum_i{c_i \cdot \mu_i}} \over  {\sigma }}  \tag{`r ref_tag("dg")`}$$
 
@@ -157,7 +157,7 @@ $$\delta_g=g \cdot \delta_0={2 \over \sum{|{c_i}|}} \cdot {{\sum_i{c_i \cdot \mu
 All the derivations for $\delta_z$ can be derived for $\delta_g$ by noticing that 
 
 $$\delta_z={{z \over g} \delta_g}$$
-thus, one simply substitutes ${{z \over g} \delta_g}$ is place of $\delta_z$. As an example, we derive here:
+thus, one simply substitutes ${{z \over g} \delta_g}$ in place of $\delta_z$. As an example, we derive here:
 
 $$\eta_p^2={\delta_g^2 \over { \delta_g^2+({{g^2  \over z^2} \cdot k})}} \tag{`r ref_tag("gtoeta")`}$$
 
@@ -166,7 +166,7 @@ $$\eta_p^2={\delta_g^2 \over { \delta_g^2+({{g^2  \over z^2} \cdot k})}} \tag{`r
 Recall that 
 $$={{\delta_z^2} \over {\delta_z^2+k}}$$
 
-and substitutes ${{z \over g} \delta_g}$ is place of $\delta_z$:
+and substitutes ${{z \over g} \delta_g}$ in place of $\delta_z$:
 
 $$\eta_p^2={{z^2 \over g^2}{\delta_g^2} \over {{z^2 \over g^2}{\delta_g^2}+k}}=$$
 
@@ -178,7 +178,7 @@ $\hfill\blacksquare$
 ## Comparability of $\delta_g$
 
 ### Paper result
-In the paper we assert that "if one group has $\mu_1=d$ and all other groups share the same mean $\mu_{2..k}=0$, and the comparison is tested with the contrast $\boldsymbol{c}=\{(k-1),-1_2,-1_3,..,-1_k\}$, the contast value is $c\mu=(k-1)\cdot d$. The g-method yields, after simple algebra, $g={1 / ({k-1})}$, and thus $\delta_{gk}=\delta_{02}$, independently of the number of groups $k$."
+In the paper we assert that "if one group has $\mu_1=d$ and all other groups share the same mean $\mu_{2..k}=0$, and the comparison is tested with the contrast $\boldsymbol{c}=\{(k-1),-1_2,-1_3,..,-1_k\}$, the contrast value is $c\mu=(k-1)\cdot d$. The g-method yields, after simple algebra, $g={1 / ({k-1})}$, and thus $\delta_{gk}=\delta_{02}$, independently of the number of groups $k$."
 
 ### Derivation
 
@@ -226,7 +226,7 @@ thus
 $$r_{contrast}=\sqrt{t_{contrast}^2 \over{t_{contrast}^2+k(n-1)}}$$
 therefore
 $$r_{contrast}=\sqrt{n\cdot d_z^2 \over{n \cdot d_z^2+k(n-1)}}$$
-by dividing num and den by $n$, we obtain:
+by dividing numerator and denominator by $n$, we obtain:
 $$r_{contrast}=\sqrt{d_z^2 \over{ d_z^2+{k(n-1)\over n}}}$$
 which means:
 $$r_{contrast}^2={d_z^2 \over{ d_z^2+{k(n-1)\over n}}}$$
@@ -277,7 +277,7 @@ $\hfill\blacksquare$
 
 # Confidence intervals
 
-All the formulas in this sections are derived directly from the literature. We only want to check that 
+All the formulae in this sections are derived directly from the literature. We only want to check that 
 $$Pr\left[ {{2 \over \sum{|{c_i}|}} \cdot \sqrt{\sum{c_i^2} \over n}} \cdot \hat{\lambda_l} \le d_g \le {{2 \over \sum{|{c_i}|}} \cdot \sqrt{\sum{c_i^2} \over n}} \cdot \hat{\lambda_l} \right]=1-\alpha \tag{`r ref_tag("cipowerdg")`}$$
 can be derived from 
 $$Pr\left[{{\hat{\lambda_l} \over \sqrt{n}} \le d_z \le {\hat{\lambda_u} \over {\sqrt{n}}}  }\right]=1-\alpha \tag{`r ref_tag("power")`}$$
