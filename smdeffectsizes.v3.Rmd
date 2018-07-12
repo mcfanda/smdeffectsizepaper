@@ -77,16 +77,16 @@ It turns out, crucially, that how the index is scaled leads to different interpr
 ## Normalized contrast effect size measure
 
 The first method to scale the unscaled index is to divide the contrast value by the square root of the contrast weights sum of squares [@wahlsten1991sample;@liu2013power; @steiger1997noncentrality, @lai2012accuracy]. The population effect size index is:
-$$\delta_n={\sum{(c_i \cdot \mu_i)} \over {\sigma \sqrt{\sum{c_i^2}}}} \tag{`r eq("dz")`}$$
-We can refer to this scaling method as the normalization method, n-method for short, and to the effect size measure as $\delta_n$, because it essentially entails to normalize the contrast weights [@liu2014note]. In general, it is useful to express the normalized effect size index in terms of the unscaled index $\delta_0$: If we set $z={1/\sqrt{\sum{c_i^2}}}$, we obtain:
-$$\delta_n={z \cdot \delta_0} \tag{`r eq("dzshort")`}$$
+$$\delta_z={\sum{(c_i \cdot \mu_i)} \over {\sigma \sqrt{\sum{c_i^2}}}} \tag{`r eq("dz")`}$$
+Although the method employs a normalization of the weights, we refer to it method as the z-method and to the effect size measure as $\delta_z$, because it essentially entails as sort of standardization of the contrast weights. In general, it is useful to express the normalized effect size index in terms of the unscaled index $\delta_0$: If we set $z={1/\sqrt{\sum{c_i^2}}}$, we obtain:
+$$\delta_z={z \cdot \delta_0} \tag{`r eq("dzshort")`}$$
 This measure has several advantages over other scaling methods but it also yields some counterintuive results, both in terms of interpretability and comparability.
 
 ### Interpretation
 The index expresses the contrast value in terms of the contrast standard deviation. This means that it does not convey the effect in terms of the within-group pooled standard deviation, as the classical Cohen's d does. In fact, when applied to the special case of comparing two groups means, it yields a different value than Cohen's original index. In particular, if we denote[^notationnote] as $\delta_{02}$ the original Cohen's index for comparing two group means, we have that:
 
-$$\delta_{n2}={\delta_{02} \over \sqrt{2}} \tag{`r eq("dz2")`}$$
-Its value is equivalent to the effect size one would obtain if the contrast value $\delta_0$ was tested against zero in one-sample design with $n$ participants, where $n$ is the size of each group in the two-group design [cf. @cohen1988, p. 46, index $d_3$]. It is important to notice that when a researcher is reporting $\delta_n$, its value and its interpretation will not correspond to classical Cohen's d in a two-group design, nor to other variants of the d-index. Consider, for instance, the standardized effect size for $k$ means taken two at a time discussed in @grissom2005effect (p. 127-128). The authors present an unscaled $\delta$ measure comparing two means out of $k$ means which is substantially equivalent to our $\delta_0$ for a contrast $\boldsymbol{c}=\{1,-1,0,...,0\}$. If a researcher computes @grissom2005effect effect size and compares it with the $\delta_n$ effect size, the results will be different by a factor of $z$. Thus, whereas $\delta_n$ is a legitimate effect size for contrasts, it does not represent a natural generalization of Cohen's d measure.
+$$\delta_{z2}={\delta_{02} \over \sqrt{2}} \tag{`r eq("dz2")`}$$
+Its value is equivalent to the effect size one would obtain if the contrast value $\delta_0$ was tested against zero in one-sample design with $n$ participants, where $n$ is the size of each group in the two-group design [cf. @cohen1988, p. 46, index $d_3$]. It is important to notice that when a researcher is reporting $\delta_z$, its value and its interpretation will not correspond to classical Cohen's d in a two-group design, nor to other variants of the d-index. Consider, for instance, the standardized effect size for $k$ means taken two at a time discussed in @grissom2005effect (p. 127-128). The authors present an unscaled $\delta$ measure comparing two means out of $k$ means which is substantially equivalent to our $\delta_0$ for a contrast $\boldsymbol{c}=\{1,-1,0,...,0\}$. If a researcher computes @grissom2005effect effect size and compares it with the $\delta_z$ effect size, the results will be different by a factor of $z$. Thus, whereas $\delta_z$ is a legitimate effect size for contrasts, it does not represent a natural generalization of Cohen's d measure.
 
 
 ### Comparability
@@ -96,21 +96,21 @@ ct<-c(-1,-1-1,3)
 (check<-sqrt(sum(ct^2)))
 ct/check
 ```
-One of the consequences of the definition of the delta index computed with the n-method is that it may give surprising results when one is trying to translate an observed value to a planned research with a different design, an operation often done in power analysis. Consider, for instance, a case [cf. @cohen1988, p. 227] in which a researcher has observed a mean difference of $2.5$ in a two-groups design, with $\boldsymbol{\mu_2}=\{4.5,2\}$, such that $\delta_{n2}={2.5 / ({\sigma \sqrt{2}})}$. She wishes to test the same difference in a three groups design in which she expects two groups to show the same mean of the first original group, and the third group as the second original group: that is, $\boldsymbol{\mu_3}=\{4.5,4.5,2\}$. She lays out the contrast weights $\boldsymbol{c}=\{1/2,1/2,-1\}$. The expected contrast value (means comparison) is clearly equavalent in the two designs, namely $c\mu=2.5$, but the expected effect size measure will be different. In the three groups design, she will obtain $\delta_{n3}={2.5 / ({\sigma \sqrt{1.5}})}$. Thus, the comparison of the same mean values yields two different effect size outcomes. Obviously, the actual size of the contrast coefficients are immaterial here, because  the index is standardized. The reason of the discrepancy in the example is that the standard deviation of the contrast decreases with increasing number of groups, even though the pooled standard deviation is the same across designs. Cohen [-@cohen1988, p. 276-278] discusses several cases in which he envisaged comparing designs with different number of groups sharing the same $\delta_0$. In all these comparisons $\delta_n$ yields, somehow counterintuively, different effect sizes.
+One of the consequences of the definition of the delta index computed with the z-method is that it may give surprising results when one is trying to translate an observed value to a planned research with a different design, an operation often done in power analysis. Consider, for instance, a case [cf. @cohen1988, p. 227] in which a researcher has observed a mean difference of $2.5$ in a two-groups design, with $\boldsymbol{\mu_2}=\{4.5,2\}$, such that $\delta_{z2}={2.5 / ({\sigma \sqrt{2}})}$. She wishes to test the same difference in a three groups design in which she expects two groups to show the same mean of the first original group, and the third group as the second original group: that is, $\boldsymbol{\mu_3}=\{4.5,4.5,2\}$. She lays out the contrast weights $\boldsymbol{c}=\{1/2,1/2,-1\}$. The expected contrast value (means comparison) is clearly equavalent in the two designs, namely $c\mu=2.5$, but the expected effect size measure will be different. In the three groups design, she will obtain $\delta_{z3}={2.5 / ({\sigma \sqrt{1.5}})}$. Thus, the comparison of the same mean values yields two different effect size outcomes. Obviously, the actual size of the contrast coefficients are immaterial here, because  the index is normalized. The reason of the discrepancy in the example is that the standard deviation of the contrast decreases with increasing number of groups, even though the pooled standard deviation is the same across designs. Cohen [-@cohen1988, p. 276-278] discusses several cases in which he envisaged comparing designs with different number of groups sharing the same $\delta_0$. In all these comparisons $\delta_z$ yields, somehow counterintuively, different effect sizes.
 
 ### Inferential testability
 
-The great advantage of the standardized contrast index $\delta_n$ is that it is easily associated with the inferential tests commonly used in testing the contrast hypothesis and to compute power parameters in power analysis. In fact, $\delta_n$ is strictly related to the t-test testing the contrast hypothesis. In particular:
+The great advantage of the normalized contrast index $\delta_z$ is that it is easily associated with the inferential tests commonly used in testing the contrast hypothesis and to compute power parameters in power analysis. In fact, $\delta_z$ is strictly related to the t-test testing the contrast hypothesis. In particular:
 
-$$E(t_{k(n-1)})=\sqrt{n} \cdot \delta_n  \tag{`r eq("ttodz")`}$$ 
-which is the non-centrality parameter of the t-distribution used to compute the power function of the t-test associated with the contrast being examined [@liu2014note;@steiger2004beyond]. This makes the standardization of the contrast a very handy scaling method when the main concern of the researcher is to compute power and power analysis is conducted with software that allows to specify the non-centrality parameter.
+$$E(t_{k(n-1)})=\sqrt{n} \cdot \delta_z  \tag{`r eq("ttodz")`}$$ 
+which is the non-centrality parameter of the t-distribution used to compute the power function of the t-test associated with the contrast being examined [@liu2014note;@steiger2004beyond]. This makes the normalization of the contrast a very handy scaling method when the main concern of the researcher is to compute power and power analysis is conducted with software that allows to specify the non-centrality parameter.
 
-Furthermore, $\delta_n$ is strictly related also with two other effect size measures often used in power analysis and meta-analysis, the $f$ and the $\eta^2$ [@cohen1988;@liu2013power]:
+Furthermore, $\delta_z$ is strictly related also with two other effect size measures often used in power analysis and meta-analysis, the $f$ and the $\eta^2$ [@cohen1988;@liu2013power]:
 
-$$f={{1 \over {\sqrt{k}} } \cdot \delta_n} \tag{`r eq("ztof")`}$$
+$$f={{1 \over {\sqrt{k}} } \cdot |\delta_z|} \tag{`r eq("ztof")`}$$
 
 and 
-$$\eta^2={\delta_n^2 \over {\delta_n^2+k}}\tag{`r eq("eta")`}$$
+$$\eta^2={\delta_z^2 \over {\delta_z^2+k}}\tag{`r eq("eta")`}$$
 
 ## Scaled effect size measure
 
@@ -119,7 +119,7 @@ A different method of scaling the constrat effect size measure which guarantees 
 $$\delta_g=g \cdot \delta_0={2 \over \sum{|{c_i}|}} \cdot {{\sum_i{c_i \cdot \mu_i}} \over  {\sigma }}  \tag{`r eq("dg")`}$$
 To be able to distinguish different effect size conceptualizations, we shall denote this measure of contrast effect size as $\delta_g$ and refer to it as computed with the g-method, for short. This method of scaling is equivalent to constraining the contrast weights such that $\sum{|c_i|}=2$, as suggested by some authors [@lai2012accuracy; @mbess]. Thus, effect size indexes scaled with the g-method are in the same scale of indexes computed with such a constrain.
 
-This scaling guarantees several advantages over the normalized effect size $\delta_n$, although it is not devoid from nuisances.
+This scaling guarantees several advantages over the normalized effect size $\delta_z$, although it is not devoid from nuisances.
 
 ### Interpretation
 
@@ -150,15 +150,15 @@ It is easy to verify that in all the cases discussed by Cohen [-@cohen1988, p. 2
 
 ###Inferential testability
 
-One drawback of the scaled effect size measure is that it does not correspond directly to the inferential tests used to test hypotheses about the contrast or to compute the associated power function. Its correspondence, however, can be obtained by simple transformations. One needs to transform $\delta_g$ into a $\delta_n$ and exploit the latter index inferential testability properties. Thus, it is useful to relate the two indices:
+One drawback of the scaled effect size measure is that it does not correspond directly to the inferential tests used to test hypotheses about the contrast or to compute the associated power function. Its correspondence, however, can be obtained by simple transformations. One needs to transform $\delta_g$ into a $\delta_z$ and exploit the latter index inferential testability properties. Thus, it is useful to relate the two indices:
 
-$$\delta_n={{z \over g} \cdot \delta_g}={{ \sum_i{|{c_i}|} \over 2\sqrt{\sum{c_i^2}}} \cdot \delta_g}  \tag{`r eq("gtoz")`}$$
+$$\delta_z={{z \over g} \cdot \delta_g}={{ \sum_i{|{c_i}|} \over 2\sqrt{\sum{c_i^2}}} \cdot \delta_g}  \tag{`r eq("gtoz")`}$$
 It should be noted that the ratio $z / g$ is usually very easy to compute. For an interaction contrast in a 2-by-2 design, $\boldsymbol{c}=\{1,-1-1,1\}$, for instance, one can mentally verify that it is 4 divided by 4, that is 1. From equation `r eqref("gtoz")` it follows that the expected value of the t-test associated with $\delta_g$ is:
 
 $$E(t_{k(n-1)})={\sqrt{n} \cdot {z \over g} \delta_g} \tag{`r eq("gtot")`}$$ 
 and the index is related with other effect size indices as follows:
 
-$$f={ {1 \over \sqrt{k}} \cdot {z \over g} \cdot \delta_g}  \tag{`r eq("gtof")`}$$
+$$f={ {1 \over \sqrt{k}} \cdot {z \over g} \cdot |\delta_g|}  \tag{`r eq("gtof")`}$$
 
 $$\eta_p^2={\delta_g^2 \over { \delta_g^2+({{g^2  \over z^2} \cdot k})}} \tag{`r eq("gtoeta")`}$$
 
@@ -170,10 +170,10 @@ As for the classical Cohen's d, estimating the population effect size using samp
 $$s_p={\sqrt{\sum_i{(n_i-1)s_i^2} \over {N-k}}}  \tag{`r eq("sp")`}$$
 which simplifies to $\sqrt{s^2}$ when groups have the same numerosity $n$ and the same variance $s^2$. This choice of estimate of $\sigma$ makes the effect size computed for the contrast equivalent to the Hedges's estimation of the standardized mean difference [@hedges1985], often reffered to as _Hedges's g_. Other forms of estimation of $\sigma$ are plausible, that can accomodate heteroskedasticity and different numerosity in the group, and reduce sampling bias [@grissom2005effect; @lai2012accuracy]. 
 
-Once $s_p$ is available, and the population means are estimated with the sample means $\boldsymbol{m}=\{m_i\}$, for any given contrast $\boldsymbol{c}=\{c_i\}$, one can compute the scaled effect size indices. As regards estimating $\delta_n$, one can lay out a contrast with arbitrarily scaled weights and compute:
+Once $s_p$ is available, and the population means are estimated with the sample means $\boldsymbol{m}=\{m_i\}$, for any given contrast $\boldsymbol{c}=\{c_i\}$, one can compute the scaled effect size indices. As regards estimating $\delta_z$, one can lay out a contrast with arbitrarily scaled weights and compute:
 
 $$d_z={\sum{(c_i \cdot m_i)} \over {s_p \sqrt{\sum{c_i^2}}}}  \tag{`r eq("sampledz")`}$$
-Alternatively, one may first standardize the contrast weights and then compute $d=\sum_i({c_i m_i})/s_p$. Obviously, the latter method works because when the weigthts are standardized, $\sqrt{\sum{c_i^2}}=1$, thus $\sum_i({c_i m_i})/s_p=d_z$. This also suggests that the n-method is handy for users of software that provides standardized contrasts weights by default, such as SPSS. 
+Alternatively, one may first normalize the contrast weights and then compute $d=\sum_i({c_i m_i})/s_p$. Obviously, the latter method works because when the weigthts are normalized, $\sqrt{\sum{c_i^2}}=1$, thus $\sum_i({c_i m_i})/s_p=d_z$. This also suggests that the z-method is handy for users of software that provides normalized contrasts weights by default, such as SPSS. 
 
 As regards estimating $\delta_g$, one can lay out a contrast with arbitrarily scaled weights, and compute
 $$d_g=2 \cdot {\sum{(c_i \cdot m_i)} \over {s_p \sum{|{c_i}|}}}  \tag{`r eq("sampledg")`}$$
@@ -204,7 +204,7 @@ $$d_g =  {t_{k(n-1)} \over {\sqrt{n}} } \cdot {g \over z}  \tag{`r eq("sampletto
 assuming[^gandtnote] that each group has the same numerosity $n$ . When the F-test is available, one just recalls that $t_{k(n-1)}=\sqrt{F_{1,k(n-1)}}$ and derives the effect size indices accordingly.
 
 A special mention should be done for @rosenthal2000contrasts contrast effect sizes based on the correlation matric. @rosenthal2000contrasts define three effect size indices, one of which, the $r_{contrast}$, can be related with the d-like measures presented here. The $r_{contrast}$, when squared, represents the sample estimate of the $\eta_p^2$ associated with the contrast, defined in  `r eqref("eta")` and `r eqref("gtoeta")`. Thus, if a researcher needs to translate $r_{contrast}$ into the proposed d-like measures, this relation can be used to find the appropriated translation formulas. However, it should be noted that the $r_{contrast}$ is defined for the sample, not the population, thus the sample size should be taken into the account [@rosnow2000contrasts, EQ 9]. After some algebra, one can derive the following transformation formulas:
-$${\delta_n}={\sqrt{k \cdot {n-1 \over n}} \cdot { r_{contrast} \over \sqrt{1-r_{contrast}^2}}} \tag{`r eq("zfromr")`}$$
+$${\delta_z}={\sqrt{k \cdot {n-1 \over n}} \cdot { r_{contrast} \over \sqrt{1-r_{contrast}^2}}} \tag{`r eq("zfromr")`}$$
 and
 $${\delta_g}={g \over z}\sqrt{k \cdot {n-1 \over n}} \cdot { r_{contrast} \over \sqrt{1-r_{contrast}^2}} \tag{`r eq("gfromr")`}$$
 
@@ -227,7 +227,7 @@ which equates $\lambda_2$ when $\boldsymbol{c}=\{1,-1\}$ as in the two independe
 When data are available for the computation of the non-centrality parameter one can simply estimate it as:
 
 $$\hat{\lambda_k}=\sqrt{{n \over \sum_i{c_i^2}}} \cdot d_0 \tag{`r eq("noncentdata")`}$$
-When only a scaled $d$ is available, the non-centrality parameter needs to be scaled back to $\sqrt{n/\sum_i{c_i^2}} \cdot d_0$ accordingly to the used scaling method.  When $d$ is an estimation of $\delta_n$,  
+When only a scaled $d$ is available, the non-centrality parameter needs to be scaled back to $\sqrt{n/\sum_i{c_i^2}} \cdot d_0$ accordingly to the used scaling method.  When $d$ is an estimation of $\delta_z$,  
 
 $$\hat{\lambda_k}=\sqrt{n} \cdot d_z \tag{`r eq("noncentdz")`}$$
 When $d$ is an estimation of $\delta_g$,  
@@ -240,7 +240,7 @@ It may come as a surprise that different effect size quantities share the same n
 
 A contrast hypothesis can also be tested with the F-test [@rosenthal2000contrasts]. Power analysis software usually provides a way to compute the power parameters based on the F-test. The non-centrality parameter of the F-test is given by [@steiger2004beyond; @cohen1988, p. 481]: 
 $$\hat{\lambda_F}=k\cdot n \cdot f^2 \tag{`r eq("noncentf")`}$$
-thus, one simply transforms $\delta_n$ or $\delta_g$ into $f$ and then compute the power of the F-test associated with 1 and $k(n-1)$ degrees of freedom.
+thus, one simply transforms $\delta_z$ or $\delta_g$ into $f$ and then compute the power of the F-test associated with 1 and $k(n-1)$ degrees of freedom.
 
 
 ## Software usage
@@ -251,17 +251,17 @@ G\*Power provides power functions for "generic t-test" which allows to input $\l
 ### R
 To the best of our knowledge, R power functions commonly used in t-test power analysis do not allow to accomodate for contrasts with arbitrary weights. This is mainly due to the computation of $df$ and $\lambda$ that are tailored either to one-sample t-test, where $\lambda=\sqrt{N} \cdot \delta$ and $df=N-1$, or to two-samples t-test, where $\lambda=\sqrt{n} \cdot \delta$ and $df=N-2$
 
-Thus, we have written a simple power function that computes the power parameters for contrasts based on estimated $\delta$ scaled in arbitrary ways, with shortcuts for the g-method and n-method. They are included in the `cpower` R package.
+Thus, we have written a simple power function that computes the power parameters for contrasts based on estimated $\delta$ scaled in arbitrary ways, with shortcuts for the g-method and z-method. They are included in the `cpower` R package.
 
 
 # Confidence intervals
 
 Confidence intervals for the estimated effect size indices can be computed using the _non-centrality interval estimation_ method defined by @steiger1997noncentrality [se also @steiger2004beyond]. Their method entails to compute the confidence interval for the non-centrality parameter of the distribution associated with the effect size index, and then trasform the limits of that interval to the scale of the effect size.
 
-When $d$ is an estimation of $\delta_n$, recall that the non-centrality parameter is equal to the observed t-test:  
+When $d$ is an estimation of $\delta_z$, recall that the non-centrality parameter is equal to the observed t-test:  
 
 $$\hat{\lambda_t}=t_{k(n-1)}=\sqrt{n}\cdot d_z \tag{`r eq("noncentt")`}$$
-The lower ($\hat{\lambda_l}$) and the upper ($\hat{\lambda_u}$) limit of the $100(1-\alpha)\%$ confidence interval can be established by finding two noncentral distributions for which the value $t$ represents the $100(1-\alpha/2)$-th and $100(\alpha/2)$-th percentile, respectively. This method yields the confidence interval in the scale of the non-centrality parameter:  
+The lower ($\hat{\lambda_l}$) and the upper ($\hat{\lambda_u}$) limit of the $100(1-\alpha)\%$ confidence interval can be established by finding two non-central distributions for which the value $t$ represents the $100(1-\alpha/2)$-th and $100(\alpha/2)$-th percentile, respectively. This method yields the confidence interval in the scale of the non-centrality parameter:  
 
 $$Pr\left[{\hat{\lambda_l} \le \hat{\lambda_t} \le \hat{\lambda_u}  }\right]=1-\alpha \tag{`r eq("ci")`}$$
 When the interval is computed, one transforms the limits to scale them to the effect size scale [cf. @lai2012accuracy]:
@@ -273,7 +273,7 @@ For the g-method effect size, one proceeds in the same way, but uses a different
 $$Pr\left[ {{2 \over \sum{|{c_i}|}} \cdot \sqrt{\sum{c_i^2} \over n}} \cdot \hat{\lambda_l} \le d_g \le {{2 \over \sum{|{c_i}|}} \cdot \sqrt{\sum{c_i^2} \over n}} \cdot \hat{\lambda_l} \right]=1-\alpha \tag{`r eq("cipowerdg")`}$$
 It is easy to verify that for the two groups design, the confidence interval around $d_{g2}$ simplifies to:
 $$Pr\left[{\sqrt{2 \over n} \cdot \hat{\lambda_l} } \le d_{g2} \le {\sqrt{2 \over n}\cdot \hat{\lambda_u}}  \right]=1-\alpha \tag{`r eq("cipowerdg2")`}$$
-and reduces to the Cohen's d confidence interval [@kelley2007confidence], as expected. It is useful to reiterate that the confidence interval for $d_z$ does not correspond to Cohen's d interval, simply because the two indices are generally different. It should be noted, however, that when the confidence interval is used to reject the null-hypothesis, both $d_g$ and $d_z$ lead to the same conclusion. In fact, the scaling of the noncentral parameter does not change the sign of the limits, thus if the interval around $d_g$ contains zero, so does the interval around $d_z$, and viceversa. The R package `cpower` accompaning this contribution provides functions to compute confidence intervals for any contrast.
+and reduces to the Cohen's d confidence interval [@kelley2007confidence], as expected. It is useful to reiterate that the confidence interval for $d_z$ does not correspond to Cohen's d interval, simply because the two indices are generally different. It should be noted, however, that when the confidence interval is used to reject the null-hypothesis, both $d_g$ and $d_z$ lead to the same conclusion. In fact, the scaling of the non-central parameter does not change the sign of the limits, thus if the interval around $d_g$ contains zero, so does the interval around $d_z$, and viceversa. The R package `cpower` accompaning this contribution provides functions to compute confidence intervals for any contrast.
 
 
 # Examples
@@ -369,9 +369,9 @@ xtable(tab,
 
 The pooled standard deviation is of `r sp`. We wish to estimate and quantify the linear and the quadratic trend of the four means. Thus, we lay out two sets of weights as described in Table \ref{tab:x4}.
 
-As regards the linear trend, we obtain a statistically significant t-test, $t(116)=$ `r testl[3]`, p.<.001, with a $d_g=$ `r dlg` and 95% confidence interval with limits [`r cilg[[1]]`,`r cilg[[3]]`]. We can then say that the linear trend shows a strong effect, equivalent to a Cohen's d of `r dlg`. More precisely, the average increment in mean response is `r dlg` standard deviations across levels of stimulus. The standardized effect size is $d_z=$ `r dlz`, with confidence limits [`r cilz[[1]]`,`r cilz[[3]]`]. As expected $d_z$ is smaller than $d_g$, and its confidence interval slightly narrower.
+As regards the linear trend, we obtain a statistically significant t-test, $t(116)=$ `r testl[3]`, p.<.001, with a $d_g=$ `r dlg` and 95% confidence interval with limits [`r cilg[[1]]`,`r cilg[[3]]`]. We can then say that the linear trend shows a strong effect, equivalent to a Cohen's d of `r dlg`. More precisely, the average increment in mean response is `r dlg` standard deviations across levels of stimulus. The normalized effect size is $d_z=$ `r dlz`, with confidence limits [`r cilz[[1]]`,`r cilz[[3]]`]. As expected $d_z$ is smaller than $d_g$, and its confidence interval slightly narrower.
 
-As regards the quadratic trend, we obtain a statistically significant t-test, $t(116)=$ `r testq[3]`, p.=`r testq[4]`, with a $d_g=$ `r dqg` and 95% confidence interval with limits [`r ciqg[[1]]`,`r ciqg[[3]]`]. The quadratic trend shows a medium effect, equivalent to a Cohen's d of `r dqz`. The quadratic trend is much smaller than the linear trend, thus the increment of response across stimulus levels is more important than the curvature that the trend shows. The standardized effect size is $d_z=$ `r dqz`, with confidence limits [`r ciqz[[1]]`,`r ciqz[[3]]`]. It is not surprising that for the quadratic trend we obtain $d_g=d_z$. In fact, in the quadratic $\sum{|{c_i^2}|}=2*\sqrt{\sum{c_i^2}}$ and thus $g=z$. 
+As regards the quadratic trend, we obtain a statistically significant t-test, $t(116)=$ `r testq[3]`, p.=`r testq[4]`, with a $d_g=$ `r dqg` and 95% confidence interval with limits [`r ciqg[[1]]`,`r ciqg[[3]]`]. The quadratic trend shows a medium effect, equivalent to a Cohen's d of `r dqz`. The quadratic trend is much smaller than the linear trend, thus the increment of response across stimulus levels is more important than the curvature that the trend shows. The normalized effect size is $d_z=$ `r dqz`, with confidence limits [`r ciqz[[1]]`,`r ciqz[[3]]`]. It is not surprising that for the quadratic trend we obtain $d_g=d_z$. In fact, in the quadratic $\sum{|{c_i^2}|}=2*\sqrt{\sum{c_i^2}}$ and thus $g=z$. 
 
 
 A second interesting example regards the computation of effect size indices in power analysis. The example is inspired by @wahlsten1991sample treatment of 2x2 designs. A researcher observes in a two-group design a factor A with means $\boldsymbol{m}=\{10,7\}$ and $s_p=4$. She wishes to run a 2 A x 2 B design where A is the same factor as in the two-group design, and B is a moderator. Let $\mu_{AB}$ be the expected mean for $A=\{{1,2}\}$ and $B=\{1,2\}$. She expects to replicate the two-group effect of A in condition $B=1$, and absence of effect of A in condition $B=2$. That is, $\{\mu_{11}=10,\mu_{21}=7,\mu_{12}=7,\mu_{22}=7\}$. Figure 1 represents the observed and the expected results.
@@ -437,9 +437,9 @@ f<-cpower::f.contr.d(c(1,-1,-1,1),dg)
 
 ```
 
-Based on the estimation of $\delta_g$, we can now compute the sample size required to achieve .80 power in the 2X2 design. Using  `power.contrast.t` function from `cpower` R package, we obtain n=`r round(p4$n,digits=0)`, for a total sample size of N=`r round(p4$n,digits=0)*4`. Coherently with the effect size measures, the same level of power can be achieved in the original two groups design with n=`r round(p2$n,digits=0)`, for a total sample size of N=`r round(p2$n,digits=0)*2`.
+Based on the estimation of $\delta_g$, we can now compute the sample size required to achieve .80 power in the 2X2 design. Using  `power.contrast.t` function from `cpower` R package, we obtain n=`r round(p4$n,digits=0)`, for a total sample size of N=`r round(p4$n,digits=0)*4`. Interestingly, the cell size required to achieve .80 power in the 2X2 design is thus almost twice as large than the cell size one needs in the two-group design, which in our example ammounts to n=`r round(p2$n,digits=0)`, for a total sample size of N=`r round(p2$n,digits=0)*2` [@perugini2018primepower].
 
-We can achieve the same results by employing G*Power. Transforming $d_g$ in $f$ yields an $f=.188$ . The "ANOVA: fixed effect, special, main effects and interactions" function of G*power, with 4 groups indicates a total sample size of 225, which is in line with the results obtained with `cpower` R package.
+We can achieve the same results by employing G\*Power. Transforming $d_g$ in $f$ yields an $f=.188$ . The "ANOVA: fixed effect, special, main effects and interactions" function of G*power, with 4 groups indicates a total sample size of 225, which is in line with the results obtained with `cpower` R package.
 
 
 
@@ -451,7 +451,7 @@ Planned comparisons and in general contrast analysis can benefit from using stan
 Balancing advantages and disavantages,  method-g $\delta_g$ index should be preferred over other scaling methods of the $\delta$-like measures of effect size. It keeps the same scale of Cohen's d, and thus can be compared with published results. It also nicely generalizes the Cohen's d logic to multi-groups designs. 
 \{MORE good things here\}
 
-Nonetheless, the n-method scales can also be considered. This method of standardizing the contrasts weights has gather popularity and thus it can be often the case that published research provides, although implicitly, this form of effect indices. As long as the researcher uses this method consistently across designs, the method is useful for quick calculations of power parameters. Indeed, in meta-analysis both scaling methods can be used, provided that only one of them is used in the same analysis. When authors of published research have reported effect sizes with different scaling methods, the meta-analyst should convert them using the same scale. When published research includes effects reported as Cohen's d (and their variant), using the g-method is advisable, because it retains the same scale of the two-group index.
+Nonetheless, the z-method scales can also be considered. This method of standardizing the contrasts weights has gather popularity and thus it can be often the case that published research provides, although implicitly, this form of effect indices. As long as the researcher uses this method consistently across designs, the method is useful for quick calculations of power parameters. Indeed, in meta-analysis both scaling methods can be used, provided that only one of them is used in the same analysis. When authors of published research have reported effect sizes with different scaling methods, the meta-analyst should convert them using the same scale. When published research includes effects reported as Cohen's d (and their variant), using the g-method is advisable, because it retains the same scale of the two-group index.
 
 \newpage
 
@@ -521,7 +521,7 @@ r_refs(file = "contrasts.bib")
 
 [^github]: https://github.com/mcfanda/cpower
 [^gandtnote]: Notice that for $k=2$, $d_{g2}={t_{(N-2)} \cdot {\sqrt{ 2 \over {n}}} }$ as expected (Glass, McGaw, \& Smith, 1981, p. 126, EQ 5.37; Rosenthal et al, 2000, p. 12, EQ 2.10) 
-[^notationnote]: Throughout the article we often refer to effect size indices computed with different scaling methods for different number of means. To clarify the notation, we use the first subscript of the index to indicate the scaling method and the second subscript to indicate the number of means in the design. For example, $\delta_{n3}$ is the effect size computed with the n-method for a contrast spanning across three means. We leave out the second subscript for general formulations of the index. 
+[^notationnote]: Throughout the article we often refer to effect size indices computed with different scaling methods for different number of means. To clarify the notation, we use the first subscript of the index to indicate the scaling method and the second subscript to indicate the number of means in the design. For example, $\delta_{z3}$ is the effect size computed with the z-method for a contrast spanning across three means. We leave out the second subscript for general formulations of the index. 
 
 \setlength{\parindent}{-0.5in}
 \setlength{\leftskip}{0.5in}
