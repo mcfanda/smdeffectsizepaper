@@ -47,7 +47,7 @@ $$\delta_0={\sum{(c_i \cdot \mu_i)} \over \sigma} \tag{`r ref_tag("delta0")`}$$
  $$E_s={\sum{c_i\mu_i} \over {\sigma}} \tag{`r eq("staiger1")`}$$
 which is $\delta_0$.
 
-## Standardized contrast effect size measure
+## Normalized contrast effect size measure
 
 $$\delta_z={\sum{(c_i \cdot \mu_i)} \over {\sigma \sqrt{\sum{c_i^2}}}} \tag{`r ref_tag("dz")`}$$
 If we set $z={1/\sqrt{\sum{c_i^2}}}$, we obtain:
@@ -69,22 +69,22 @@ $$\hat{\sigma_{\psi}}={\sqrt{{(\sum{c_i\hat{\mu_i}})^2\over N{\sum{c_i^2} \over 
 since $N=kn$, we have
 $$\sigma_{\psi}={\sqrt{{(\sum{c_i\mu_i})^2\over k\sum{c_i^2}}}}$$
 thus,
-$$\sigma_{\psi}={\sum{c_i\mu_i}\over\sqrt{ k\sum{c_i^2}}}$$
+$$\sigma_{\psi}={|\sum{c_i\mu_i}|\over\sqrt{ k\sum{c_i^2}}}$$
 and 
-$$f={\sigma_{\psi} \over \sigma}={\sum{c_i\mu_i}\over\sqrt{ k\sum{c_i^2}}}={{1 \over \sqrt{k}} \cdot \delta_z}$$
+$$f={\sigma_{\psi} \over \sigma}={|\sum{c_i\mu_i}|\over\sqrt{ k\sum{c_i^2}}}={{1 \over \sqrt{k}} \cdot \delta_z}$$
 $\hfill\blacksquare$
 
 However, it is interesting to show the same result without dealing with sample estimates. Consider a regression with $k-1$ contrasts, one is the contrast of interest $\psi$, and the others, $\phi_i$, are contrasts orthogonal to each other and to the contrast of interest.  
-The total variance of the $y$ variable will be:
+The total expected variance of the $y$ variable will be:
 $$\sigma_t^2=\sigma_\psi^2+\sum{\sigma_{\psi_i}^2}+\sigma^2$$
 because of the orthogonality of the contrasts. The population $b$ coefficient associated with $\psi$ is:
 $$b_\psi={\sum{c_i\mu_i} /k \over \sum{c_i^2}/k}={\sum{c_i\mu_i} \over \sum{c_i^2}}$$
 and the variance examplained by the contrast $\psi$ is given by:
 $$\sigma_\psi^2=b_\psi^2 \cdot \sigma_c^2={(\sum{c_i\mu_i})^2 \over (\sum{c_i^2})^2} \cdot {\sum{c_i^2} \over k}= {(\sum{c_i\mu_i})^2 \over \sum{c_i^2}} \cdot {1 \over k}$$
 Taking the square root yields:
-$$\sigma_\psi= {1 \over \sqrt{k}} \cdot {\sum{c_i\mu_i} \over \sqrt{\sum{c_i^2}}}$$
+$$\sigma_\psi= {1 \over \sqrt{k}} \cdot {|\sum{c_i\mu_i}| \over \sqrt{\sum{c_i^2}}}$$
 because we were looking for the $f=\sigma_\psi/\sigma$ ratio, we obtain
-$$f={\sigma_\psi \over \sigma}={1 \over \sqrt{k}} \cdot {\sum{c_i\mu_i} \over \sigma \sqrt{\sum{c_i^2}}}={1 \over \sqrt{k}} \cdot \delta_z$$
+$$f={\sigma_\psi \over \sigma}={1 \over \sqrt{k}} \cdot {\sum{c_i\mu_i} \over \sigma \sqrt{\sum{c_i^2}}}={1 \over \sqrt{k}} \cdot |\delta_z|$$
 $\hfill\blacksquare$
 
 
@@ -174,6 +174,19 @@ $$={{z^2\delta_g^2} \over {z^2\delta_g^2+g^2k }}$$
 we now divide numerator and denominator by $z^2$ and we obtain:
 $$={{\delta_g^2} \over {\delta_g^2+ {g^2 \over z^2}k}}$$
 $\hfill\blacksquare$
+
+## Comparability of $\delta_g$
+
+### Paper result
+In the paper we assert that "if one group has $\mu_1=d$ and all other groups share the same mean $\mu_{2..k}=0$, and the comparison is tested with the contrast $\boldsymbol{c}=\{(k-1),-1_2,-1_3,..,-1_k\}$, the contast value is $c\mu=(k-1)\cdot d$. The g-method yields, after simple algebra, $g={1 / ({k-1})}$, and thus $\delta_{gk}=\delta_{02}$, independently of the number of groups $k$."
+
+### Derivation
+
+Let $\boldsymbol{\mu}=\{d,0,0,..,0\}$ and $\boldsymbol{c}=\{(k-1),-1,-1,..,-1\}$, such that $\sum{c_i}=(k-1)+(k-1)\cdot (-1)=0$. The sum of the absolute values of $c_i$ is $\sum{|c_i|}=(k-1)+(k-1)\cdot |(-1)|=2 \cdot (k-1)$ and thus $g=2/2(\cdot k-1)=1/(k-1)$. Then,
+$$ d_{gk}={1 \over k-1} \cdot (k-1)d=d$$, for any value of $k$.
+
+$\hfill\blacksquare$
+
 
 # Sample Estimation
 
