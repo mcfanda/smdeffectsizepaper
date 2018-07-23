@@ -280,6 +280,9 @@ and reduces to the Cohen's d confidence interval [@kelley2007confidence], as exp
 # Examples
 
 ```{r echo=FALSE, results='hide'}
+#library(devtools)
+#install_github("mcfanda/cpower")
+
 library(cpower)
 
 ### this is from Daniel Lakens's blog
@@ -308,7 +311,7 @@ data$grp<-factor(data$grp)
 k<-length(m)
 linear<-c(-3,-1,1,3)
 sp<-summary(lm(y~grp,data=data))$sigma
-testl<-round(test.contr(data,"y","grp",linear),digits = 4)
+testl<-round(test.contr(cont = linear,y=data$y,x=data$grp),digits = 4)
 dlg<-d.contr(linear,means = m,sd=sp,scale = "g")
 dlz<-d.contr(linear,means = m,sd=sp,scale = "z")
 cilg<-ci.contr(linear,dlg,n = n)
@@ -317,7 +320,7 @@ cilz<-ci.contr(linear,dlz,n = n,scale = "z")
 quad<-c(-1,1,1,-1)
 dqg<- d.contr(quad,means = m,sd=sp,scale = "g")
 dqz<- d.contr(quad,means = m,sd=sp,scale = "z")
-testq<- round(test.contr(data,"y","grp",quad),digits = 4)
+testq<- round(test.contr(quad,y = data$y,x=data$grp),digits = 4)
 ciqg<-ci.contr(quad,dqg,n = n)
 ciqz<-ci.contr(quad,dqz,n = n,scale = "z")
 
