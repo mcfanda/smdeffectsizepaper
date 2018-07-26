@@ -13,7 +13,6 @@ affiliation:
   - id            : "1"
     institution   : "Department of Psychology, University of Milano-Bicocca"
 author_note: |
- This manuscript is currently under submission. Please do not cite without permission
 abstract: |
   
   
