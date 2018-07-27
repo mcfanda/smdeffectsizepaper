@@ -8,7 +8,7 @@ The manuscript is written in Rmarkdown and requires [papaja](https://github.com/
 
 ## Files:
  
-* smdeffectsizes.v1.Rmd: Rmarkdown source file of the manuscript, with embedded data and examples. Corresponding .pdf file is the compiled version
+* smdeffectsizes.v*.Rmd: Rmarkdown source file of the manuscript, with embedded data and examples. Corresponding .pdf file is the compiled version. Latest version is 5.
 
 * contrast.bib: latex references repository
 
