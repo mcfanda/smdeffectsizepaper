@@ -429,7 +429,7 @@ grid.arrange(p1,p2,ncol=2)
 
 The researcher wishes to estimate the expected $\delta_g$ for the interaction A X B, and its power parameters. For the 2-groups design, the observed effect size is: 
 $$\delta_{g2}={2 \over 2} \cdot {{10-7} \over 4}={3 \over 4}$$
-The interaction effect contrast can be written as $\boldsymbol{c}=\{1,-1,-1,1\}$. Computing the expected effect size using g-method yields:
+The interaction effect contrast can be written as $\boldsymbol{c}=\{1,-1,-1,1\}$. Computing the expected effect size using the g-method yields:
 
 $$\delta_{g4}={2 \over 4} \cdot  {{10-7-7+7} \over 4} ={3 \over 8}$$
 Thus, the effect size of the interaction is half the effect size of the effect obtained in the two-group design. Notice that for the interaction it would be tempting  to compute the effect size without a scaling method, but the result will be wrong.
