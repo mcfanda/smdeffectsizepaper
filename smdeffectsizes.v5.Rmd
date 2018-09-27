@@ -32,6 +32,7 @@ editor_options:
 ---
 
 ```{r load_packages, include = FALSE}
+
 #devtools::install_github("crsh/papaja")
 library("papaja")
 papaja::apa6_pdf
@@ -310,7 +311,7 @@ data$grp<-factor(data$grp)
 k<-length(m)
 linear<-c(-3,-1,1,3)
 sp<-summary(lm(y~grp,data=data))$sigma
-(testl<-round(test.contr(cont = linear,y=data$y,x=data$grp),digits = 4))
+(testl<-round(test.contr(cont = linear,y="y",x="grp",data = data),digits = 4))
 dlg<-d.contr(linear,means = m,sd=sp,scale = "g")
 round(test.contr(cont = linear,d = dlg,n=n,scale="g"),digits = 4)
 dlz<-d.contr(linear,means = m,sd=sp,scale = "z")
@@ -322,7 +323,7 @@ cilz<-ci.contr(linear,dlz,n = n,scale = "z")
 quad<-c(-1,1,1,-1)
 dqg<- d.contr(quad,means = m,sd=sp,scale = "g")
 dqz<- d.contr(quad,means = m,sd=sp,scale = "z")
-testq<- round(test.contr(quad,y = data$y,x=data$grp),digits = 4)
+testq<- round(test.contr(quad,y = "y",x="grp",data=data),digits = 4)
 ciqg<-ci.contr(quad,dqg,n = n)
 ciqz<-ci.contr(quad,dqz,n = n,scale = "z")
 

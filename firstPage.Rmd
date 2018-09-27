@@ -1,0 +1,39 @@
+---
+title             : "Standardized means difference effect size measures for planned comparisons, trend analysis and other applications of contrast analysis"
+shorttitle        : "Effect sizes measures for contrasts"
+author: 
+  - name          : "Marcello Gallucci"
+    affiliation   : "1"
+    corresponding : yes    # Define only one corresponding author
+    address       : "Department of Psychology, University of Milano-Bicocca, Piazza dell'Ateneo Nuovo, 20126 Milan, Italy"
+    email         : "marcello.gallucci@unimib.it"
+  - name          : "Marco Perugini"
+    affiliation   : "1"
+affiliation:
+  - id            : "1"
+    institution   : "Department of Psychology, University of Milano-Bicocca"
+author_note: |
+keywords          : "Effect size, contrast analysis, power analysis"
+bibliography      : ["contrasts.bib"]
+figsintext        : yes
+figurelist        : no
+tablelist         : no
+footnotelist      : no
+lineno            : yes
+mask              : no
+class             : "man"
+output            : papaja::apa6_pdf
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r load_packages, include = FALSE}
+#devtools::install_github("crsh/papaja")
+library("papaja")
+papaja::apa6_pdf
+source("resources/writing_functions.R")
+```
+
+
+\setlength{\parindent}{-0.5in}
+\setlength{\leftskip}{0.5in}
